@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!-- 4 cm, 50 g cube to pick. The model origin is the cube centre. -->
+<sdf version="1.6">
+  <model name="cube">
+    <link name="link">
+      <inertial>
+        <mass>0.05</mass>
+        <!-- m * s^2 / 6 -->
+        <inertia>
+          <ixx>1.33e-5</ixx><ixy>0</ixy><ixz>0</ixz>
+          <iyy>1.33e-5</iyy><iyz>0</iyz>
+          <izz>1.33e-5</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><box><size>0.04 0.04 0.04</size></box></geometry>
+        <surface>
+          <friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction>
+          <contact><ode><kp>1e6</kp><kd>100</kd><min_depth>0.001</min_depth><max_vel>0.1</max_vel></ode></contact>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry><box><size>0.04 0.04 0.04</size></box></geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Red</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

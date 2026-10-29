@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!--
+  Wrist-mounted RGB-D camera (Gazebo Classic depth sensor + gazebo_ros_camera).
+  camera_link: x forward (ROS body convention); camera_optical_frame: z forward (image convention).
+  Topics: /wrist_camera/image_raw, /wrist_camera/camera_info,
+          /wrist_camera/depth/image_raw, /wrist_camera/points
+-->
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+  <xacro:macro name="wrist_camera" params="prefix parent *origin">
+    <link name="${prefix}camera_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><box size="0.025 0.09 0.025"/></geometry>
+        <material name="camera_black"><color rgba="0.05 0.05 0.05 1"/></material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry><box size="0.025 0.09 0.025"/></geometry>
+      </collision>
+      <inertial>
+        <mass value="0.07"/>
+        <inertia ixx="5e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="5e-5"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}camera_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${prefix}camera_link"/>
+      <xacro:insert_block name="origin"/>
+    </joint>
+
+    <link name="${prefix}camera_optical_frame"/>
+    <joint name="${prefix}camera_optical_joint" type="fixed">
+      <parent link="${prefix}camera_link"/>
+      <child link="${prefix}camera_optical_frame"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    </joint>
+
+    <gazebo reference="${prefix}camera_link">
+      <material>Gazebo/Black</material>
+      <sensor type="depth" name="wrist_camera">
+        <always_on>true</always_on>
+        <update_rate>15.0</update_rate>
+        <visualize>true</visualize>
+        <camera>
+          <horizontal_fov>1.211</horizontal_fov>  <!-- ~69 deg, similar to RealSense D435 -->
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>3.0</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.005</stddev>
+          </noise>
+        </camera>
+        <plugin name="wrist_camera_controller" filename="libgazebo_ros_camera.so">
+          <camera_name>wrist_camera</camera_name>
+          <frame_name>${prefix}camera_optical_frame</frame_name>
+          <min_depth>0.05</min_depth>
+          <max_depth>3.0</max_depth>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+</robot>

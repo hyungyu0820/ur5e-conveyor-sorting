@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!-- Open sorting bin on the floor, 22 x 22 cm, 10 cm walls. The colour is replaced when spawned. -->
+<sdf version="1.6">
+  <model name="bin">
+    <static>true</static>
+    <link name="link">
+      <collision name="floor">
+        <pose>0 0 0.005 0 0 0</pose>
+        <geometry><box><size>0.22 0.22 0.01</size></box></geometry>
+      </collision>
+      <visual name="floor">
+        <pose>0 0 0.005 0 0 0</pose>
+        <geometry><box><size>0.22 0.22 0.01</size></box></geometry>
+        <material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Red</name></script></material>
+      </visual>
+      <collision name="wall_px"><pose>0.105 0 0.05 0 0 0</pose><geometry><box><size>0.01 0.22 0.1</size></box></geometry></collision>
+      <collision name="wall_nx"><pose>-0.105 0 0.05 0 0 0</pose><geometry><box><size>0.01 0.22 0.1</size></box></geometry></collision>
+      <collision name="wall_py"><pose>0 0.105 0.05 0 0 0</pose><geometry><box><size>0.22 0.01 0.1</size></box></geometry></collision>
+      <collision name="wall_ny"><pose>0 -0.105 0.05 0 0 0</pose><geometry><box><size>0.22 0.01 0.1</size></box></geometry></collision>
+      <visual name="wall_px"><pose>0.105 0 0.05 0 0 0</pose><geometry><box><size>0.01 0.22 0.1</size></box></geometry>
+        <material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Red</name></script></material></visual>
+      <visual name="wall_nx"><pose>-0.105 0 0.05 0 0 0</pose><geometry><box><size>0.01 0.22 0.1</size></box></geometry>
+        <material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Red</name></script></material></visual>
+      <visual name="wall_py"><pose>0 0.105 0.05 0 0 0</pose><geometry><box><size>0.22 0.01 0.1</size></box></geometry>
+        <material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Red</name></script></material></visual>
+      <visual name="wall_ny"><pose>0 -0.105 0.05 0 0 0</pose><geometry><box><size>0.22 0.01 0.1</size></box></geometry>
+        <material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Red</name></script></material></visual>
+    </link>
+  </model>
+</sdf>

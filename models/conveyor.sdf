@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+  Conveyor belt, 1.2 m long, running along +y of the model frame. Belt top at z = 0.20 m.
+  The light curtain (sensor_y) is where the robot picks; the yellow bar marks it.
+  Spawned at world (0.5, -0.15) by launch/ur_gripper_sim.launch.py, so the sensor is at world y = 0.0.
+-->
+<sdf version="1.6">
+  <model name="conveyor">
+    <static>true</static>
+    <link name="belt">
+      <collision name="collision">
+        <pose>0 0 0.1 0 0 0</pose>
+        <geometry><box><size>0.2 1.2 0.2</size></box></geometry>
+        <surface>
+          <friction><ode><mu>0.5</mu><mu2>0.5</mu2></ode></friction>
+        </surface>
+      </collision>
+      <visual name="belt_surface">
+        <pose>0 0 0.1 0 0 0</pose>
+        <geometry><box><size>0.2 1.2 0.2</size></box></geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/DarkGrey</name>
+          </script>
+        </material>
+      </visual>
+      <!-- side rails (visual only, so the gripper fingers can reach down) -->
+      <visual name="rail_left">
+        <pose>-0.105 0 0.19 0 0 0</pose>
+        <geometry><box><size>0.01 1.2 0.04</size></box></geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>
+      </visual>
+      <visual name="rail_right">
+        <pose>0.105 0 0.19 0 0 0</pose>
+        <geometry><box><size>0.01 1.2 0.04</size></box></geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Grey</name>
+          </script>
+        </material>
+      </visual>
+      <!-- light curtain marker -->
+      <visual name="sensor_post">
+        <pose>0.125 0.15 0.24 0 0 0</pose>
+        <geometry><box><size>0.02 0.02 0.08</size></box></geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Yellow</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+
+    <plugin name="conveyor_belt" filename="libur_conveyor_belt.so">
+      <length>1.2</length>
+      <width>0.2</width>
+      <height>0.2</height>
+      <speed>0.1</speed>
+      <sensor_y>0.15</sensor_y>
+      <exclude_model>ur</exclude_model>
+    </plugin>
+  </model>
+</sdf>

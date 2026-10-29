@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+  UR arm (ur_description) + parallel gripper + wrist RGB-D camera.
+  All xacro args of ur.urdf.xacro (ur_type, tf_prefix, sim_gazebo, simulation_controllers, ...)
+  are inherited, so ur_sim_control.launch.py can use this file as description_file.
+-->
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="$(arg name)">
+
+  <!-- world + UR arm + gazebo_ros2_control plugin -->
+  <xacro:include filename="$(find ur_description)/urdf/ur.urdf.xacro"/>
+
+  <!-- arm colour in Gazebo (Gazebo/Orange, Gazebo/White, Gazebo/Blue, Gazebo/Red, Gazebo/Yellow, ...) -->
+  <xacro:arg name="robot_color" default="Gazebo/Orange"/>
+  <xacro:macro name="arm_link_color" params="link">
+    <gazebo reference="$(arg tf_prefix)${link}">
+      <material>$(arg robot_color)</material>
+    </gazebo>
+  </xacro:macro>
+  <xacro:arm_link_color link="base_link_inertia"/>
+  <xacro:arm_link_color link="shoulder_link"/>
+  <xacro:arm_link_color link="upper_arm_link"/>
+  <xacro:arm_link_color link="forearm_link"/>
+  <xacro:arm_link_color link="wrist_1_link"/>
+  <xacro:arm_link_color link="wrist_2_link"/>
+  <xacro:arm_link_color link="wrist_3_link"/>
+
+  <xacro:include filename="$(find ur_pick_place)/urdf/parallel_gripper.xacro"/>
+  <xacro:include filename="$(find ur_pick_place)/urdf/wrist_camera.xacro"/>
+
+  <xacro:parallel_gripper prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)tool0"/>
+
+  <!-- camera sits on the side of the gripper base, looking along the tool z-axis -->
+  <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
+    <origin xyz="0.055 0 0.02" rpy="0 ${-pi/2} 0"/>
+  </xacro:wrist_camera>
+
+</robot>

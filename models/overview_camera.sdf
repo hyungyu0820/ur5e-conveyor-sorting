@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+  Fixed camera looking at the whole sorting cell, for recording demos.
+  Publishes /overview_camera/image_raw. Not spawned by default (rendering costs CPU):
+    ros2 run gazebo_ros spawn_entity.py -entity overview_camera \
+      -file $(ros2 pkg prefix ur_pick_place)/share/ur_pick_place/models/overview_camera.sdf
+-->
+<sdf version="1.6">
+  <model name="overview_camera">
+    <static>true</static>
+    <pose>1.45 -1.15 1.15 0 0.50 2.43</pose>
+    <link name="link">
+      <sensor type="camera" name="overview_camera">
+        <update_rate>5.0</update_rate>
+        <camera>
+          <horizontal_fov>1.1</horizontal_fov>
+          <image><width>800</width><height>600</height><format>R8G8B8</format></image>
+          <clip><near>0.05</near><far>10.0</far></clip>
+        </camera>
+        <plugin name="overview_camera_controller" filename="libgazebo_ros_camera.so">
+          <camera_name>overview_camera</camera_name>
+          <frame_name>overview_camera</frame_name>
+        </plugin>
+      </sensor>
+    </link>
+  </model>
+</sdf>

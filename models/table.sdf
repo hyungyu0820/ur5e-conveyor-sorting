@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- Static table in front of the robot. Top surface at z = 0.20 m, spans x 0.25..0.75, y -0.45..0.45. -->
+<sdf version="1.6">
+  <model name="table">
+    <static>true</static>
+    <link name="link">
+      <pose>0 0 0.1 0 0 0</pose>
+      <collision name="collision">
+        <geometry><box><size>0.5 0.9 0.2</size></box></geometry>
+        <surface>
+          <friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry><box><size>0.5 0.9 0.2</size></box></geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Wood</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
