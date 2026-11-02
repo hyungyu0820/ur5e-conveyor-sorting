@@ -202,10 +202,33 @@ class ConveyorSorter(PickPlace):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--cycles", type=int, default=0, help="stop after N items (0 = forever)")
+    parser.add_argument("--detector", choices=["color", "gemini"], default="color", help="item recogniser")
+    parser.add_argument("--rule", help="natural-language sorting rule for --detector gemini")
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])
 
     rclpy.init()
     node = ConveyorSorter(color_detector.detect)
+    if args.detector == "gemini":
+        from gemini_detector import GeminiDetector
+
+        log = node.get_logger().info
+        try:
+            gemini = GeminiDetector(rule=args.rule, log=log)
+        except RuntimeError as e:
+            node.get_logger().error(str(e))
+            rclpy.try_shutdown()
+            sys.exit(1)
+        log(f"recogniser: Gemini Robotics-ER, rule: {gemini.rule}")
+
+        # Gemini 호출이 실패해도 라인이 멈추지 않게 색 인식으로 대신함
+        def detect(rgb):
+            try:
+                return gemini(rgb)
+            except Exception as e:  # noqa: BLE001 (네트워크 · 키 · 응답 형식 오류 모두)
+                node.get_logger().warning(f"Gemini failed ({type(e).__name__}: {str(e)[:120]}), using colour detector")
+                return color_detector.detect(rgb)
+
+        node.detect = detect
     try:
         node.run_forever(args.cycles)
     except KeyboardInterrupt:

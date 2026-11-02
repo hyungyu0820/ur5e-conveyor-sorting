@@ -23,6 +23,7 @@ install(DIRECTORY urdf config launch rviz models
 
 install(PROGRAMS scripts/gripper.py scripts/pick_place.py scripts/ur_kinematics.py scripts/spawn_object.py
   scripts/conveyor_layout.py scripts/conveyor_scene.py scripts/conveyor_sorter.py scripts/color_detector.py
+  scripts/gemini_detector.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
