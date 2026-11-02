@@ -30,6 +30,24 @@
 - **교체 가능한 인식 모듈**: `detect(rgb) -> [label, u, v]` 인터페이스로 분리해서 VLM(예: Gemini Robotics-ER)으로 바꿔 끼울 수 있게 설계
 - **실행 환경 자동 정리**: 남은 프로세스 정리, WSL2 렌더링 우회, 로그 저장을 `run_sim.sh` 하나로 처리
 
+## Gemini Robotics-ER 연동 (말로 분류 규칙 주기)
+
+인식 모듈을 비전-언어 모델 **Gemini Robotics-ER 2**로 바꿔 끼울 수 있습니다. 같은 `detect(rgb)` 인터페이스라 분류 로봇 코드는 그대로이고, **자연어로 분류 규칙**을 줄 수 있습니다.
+
+```bash
+ros2 run ur_pick_place conveyor_sorter.py --detector gemini
+ros2 run ur_pick_place conveyor_sorter.py --detector gemini --rule "초록색 물건은 파란 분류함에 넣고, 나머지는 같은 색 분류함에 넣어"
+```
+
+| 시험 | 결과 |
+|---|---|
+| 기본 규칙(같은 색) | **4 / 4 정답**, 위치는 색 인식과 1픽셀 차이 |
+| 자연어 규칙("초록 → 파란 분류함") | **6 / 6 정답**: 초록 상자를 "green block"으로 인식하면서 규칙대로 파란 분류함에 넣음 |
+| 응답 시간 | 물건당 약 5~6초 (벨트가 멈춘 동안 호출) |
+
+- Gemini 호출이 실패하면 자동으로 색 인식으로 대신해서 라인이 멈추지 않습니다.
+- API 키는 `GEMINI_API_KEY` 환경 변수나 `~/.gemini_api_key` 파일에서 읽습니다(저장소에 넣지 않음).
+
 ## 시스템 구성
 
 ```mermaid
@@ -120,7 +138,7 @@ ur_pick_place/
 - Gazebo Classic은 2025년 1월에 지원이 종료되었습니다.
 
 **로드맵**
-1. 인식 모듈을 **Gemini Robotics-ER**(VLM)로 교체: 자연어 분류 규칙 ("깨지기 쉬운 물건은 왼쪽")
+1. ~~인식 모듈을 Gemini Robotics-ER(VLM)로 교체~~ ✅ 완료. 다음: 모양 · 종류가 다양한 물건으로 확장
 2. **NVIDIA Isaac Sim**으로 이전: 사실적 렌더링과 물리, ROS 2 브리지
 3. **Isaac Lab**으로 학습 기반 잡기 (강화학습 / 모방학습)
 
