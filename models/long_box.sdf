@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- 12 x 4 x 4 cm, 120 g box. Lying at an angle it is wider than the open gripper (9 cm),
+     so it can only be picked across its short side. The model origin is the box centre. -->
+<sdf version="1.6">
+  <model name="long_box">
+    <link name="link">
+      <inertial>
+        <mass>0.12</mass>
+        <!-- m (b^2 + c^2) / 12 -->
+        <inertia>
+          <ixx>3.2e-5</ixx><ixy>0</ixy><ixz>0</ixz>
+          <iyy>1.6e-4</iyy><iyz>0</iyz>
+          <izz>1.6e-4</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><box><size>0.12 0.04 0.04</size></box></geometry>
+        <surface>
+          <friction><ode><mu>1.0</mu><mu2>1.0</mu2></ode></friction>
+          <contact><ode><kp>1e6</kp><kd>100</kd><min_depth>0.001</min_depth><max_vel>0.1</max_vel></ode></contact>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry><box><size>0.12 0.04 0.04</size></box></geometry>
+        <material>
+          <script>
+            <uri>file://media/materials/scripts/gazebo.material</uri>
+            <name>Gazebo/Red</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

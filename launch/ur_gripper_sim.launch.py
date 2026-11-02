@@ -18,6 +18,11 @@ def generate_launch_description():
         DeclareLaunchArgument("gazebo_gui", default_value="true", description="Start gazebo with GUI?"),
         DeclareLaunchArgument("spawn_objects", default_value="true", description="Spawn the scene objects?"),
         DeclareLaunchArgument(
+            "faults", default_value="false",
+            description="conveyor scene: mix in exceptions (rotated long boxes, overlaps, unknown items) and gripper faults",
+        ),
+        DeclareLaunchArgument("seed", default_value="1", description="random seed for the item feeder and faults"),
+        DeclareLaunchArgument(
             "scene", default_value="table",
             description="table: table + one cube; conveyor: conveyor belt, bins and an endless item feeder",
         ),
@@ -77,6 +82,7 @@ def generate_launch_description():
             package="ur_pick_place",
             executable="conveyor_scene.py",
             output="screen",
+            arguments=["--faults", LaunchConfiguration("faults"), "--seed", LaunchConfiguration("seed")],
             condition=scene_is("conveyor"),
         ),
     ]

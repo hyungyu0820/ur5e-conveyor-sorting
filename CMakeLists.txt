@@ -10,7 +10,7 @@ find_package(std_srvs REQUIRED)
 
 # Gazebo plugin: welds the grasped object to the wrist (services /grasp/attach, /grasp/detach)
 add_library(ur_grasp_attacher SHARED src/grasp_attacher.cpp)
-ament_target_dependencies(ur_grasp_attacher gazebo_dev gazebo_ros rclcpp std_srvs)
+ament_target_dependencies(ur_grasp_attacher gazebo_dev gazebo_ros rclcpp std_msgs std_srvs)
 # Gazebo plugin: conveyor belt with a light curtain (/conveyor/power, /conveyor/running, /conveyor/object_at_sensor)
 add_library(ur_conveyor_belt SHARED src/conveyor_belt.cpp)
 ament_target_dependencies(ur_conveyor_belt gazebo_dev gazebo_ros rclcpp std_msgs std_srvs)

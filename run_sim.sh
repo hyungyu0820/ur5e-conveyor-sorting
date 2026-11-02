@@ -9,7 +9,7 @@ UR_TYPE=${1:-ur5e}
 shift || true
 
 # 0) 다른 터미널에서 이미 시뮬레이션이 돌고 있으면 건드리지 않고 종료
-if pgrep -f "ros2 launch ur_pick_place" >/dev/null; then
+if pgrep -f "^/usr/bin/python3 [^ ]*/ros2 launch ur_pick_place" >/dev/null; then
   echo "이미 시뮬레이션이 실행 중입니다. 그 터미널에서 Ctrl+C로 끈 뒤 다시 실행하세요." >&2
   exit 1
 fi

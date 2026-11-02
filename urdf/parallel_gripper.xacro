@@ -29,10 +29,9 @@
         <geometry><box size="0.02 0.01 0.06"/></geometry>
         <material name="gripper_grey"><color rgba="0.6 0.6 0.6 1"/></material>
       </visual>
-      <collision>
-        <origin xyz="0 0 0.03" rpy="0 0 0"/>
-        <geometry><box size="0.02 0.01 0.06"/></geometry>
-      </collision>
+      <!-- no collision on purpose. Position-controlled fingers teleport and would shove objects
+           into line before grasping. Whether a grasp succeeds is decided geometrically by the
+           grasp_attacher plugin instead (too wide, overlapping, ...). -->
       <inertial>
         <origin xyz="0 0 0.03" rpy="0 0 0"/>
         <mass value="0.05"/>
@@ -107,7 +106,7 @@
         <palm_link>${prefix}wrist_3_link</palm_link>
         <finger_link>${prefix}finger_left_link</finger_link>
         <finger_link>${prefix}finger_right_link</finger_link>
-        <max_distance>0.05</max_distance>
+        <max_opening>0.09</max_opening>
       </plugin>
     </gazebo>
 

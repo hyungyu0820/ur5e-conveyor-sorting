@@ -17,8 +17,14 @@ BINS = {
     "green": (-0.45, 0.0),
     "blue": (-0.40, 0.30),
 }
-# items whose colour cannot be recognised go here
+# hold bin (보류함): items the robot cannot or should not sort go here
 REJECT = (0.05, -0.45)
 
 # Gazebo material for each label
 GAZEBO_COLORS = {"red": "Red", "green": "Green", "blue": "Blue"}
+
+# fault mode (launch faults:=true): share of each item kind, and gripper fault rates
+FAULT_MIX = {"normal": 0.55, "long": 0.20, "pair": 0.15, "unknown": 0.10}
+SLIP_RATE = 0.10   # grasp comes up empty
+DROP_RATE = 0.05   # held item falls out during transport
+UNKNOWN_COLOR = "Purple"
