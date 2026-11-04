@@ -71,6 +71,7 @@ def main():
         desc = ", ".join(f"{d.label} centre ({d.u:.0f},{d.v:.0f}) area {d.area}" for d in found) or "item not found"
         print(f"  {label:7s} z={z:.2f}: {desc}")
         tile = rgb[:, :, ::-1].copy()
+        cv2.imwrite(os.path.expanduser(f"~/ros2_ws/log/sim/wrist_{name}_{label}.png"), tile)
         cv2.putText(tile, f"{name} {label}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
         tiles.append(cv2.resize(tile, (320, 240)))
     cv2.imwrite(os.path.expanduser(f"~/ros2_ws/log/sim/wrist_{name}.png"), np.hstack(tiles))
