@@ -11,6 +11,7 @@ Sequence: home -> open -> above cube -> down -> close + attach -> up
 Positions are TCP (point between the fingertips) in the world frame, see launch/ur_gripper_sim.launch.py.
 """
 import argparse
+import fcntl
 import os
 import subprocess
 import sys
@@ -51,6 +52,18 @@ def object_position(name):
     return [float(v) for v in values[:3]]
 
 
+def lock_arm():
+    """Only one program may command the arm. The lock ends with the process, even after a crash."""
+    path = os.path.expanduser("~/.ros/ur_pick_place_arm.lock")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    f = open(path, "w")
+    try:
+        fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        sys.exit("다른 프로그램이 이미 로봇팔을 쓰고 있습니다. 그 프로그램을 끈 뒤 다시 실행하세요.")
+    return f  # keep it referenced: closing the file releases the lock
+
+
 def to_duration(t):
     return Duration(sec=int(t), nanosec=int((t % 1) * 1e9))
 
@@ -70,13 +83,19 @@ class PickPlace(Node):
         if all(n in pos for n in kin.JOINT_NAMES):
             self.q = np.array([pos[n] for n in kin.JOINT_NAMES])
 
-    def wait_ready(self):
+    def wait_ready(self, timeout=60.0):
         self.get_logger().info("waiting for controllers and /joint_states ...")
-        self.arm.wait_for_server()
-        self.attach_cli.wait_for_service()
-        self.detach_cli.wait_for_service()
-        while self.q is None or self.gripper_pub.get_subscription_count() == 0:
+        end = time.time() + timeout
+        ready = (
+            self.arm.wait_for_server(timeout_sec=timeout)
+            and self.attach_cli.wait_for_service(timeout_sec=max(end - time.time(), 0.0))
+            and self.detach_cli.wait_for_service(timeout_sec=max(end - time.time(), 0.0))
+        )
+        while ready and (self.q is None or self.gripper_pub.get_subscription_count() == 0):
             rclpy.spin_once(self, timeout_sec=0.1)
+            ready = time.time() < end
+        if not ready:
+            raise RuntimeError(f"시뮬레이션이 {timeout:.0f}초 안에 준비되지 않았습니다. run_sim.sh 로그를 확인하세요.")
 
     # ---------- arm ----------
     def send_joints(self, waypoints, duration):

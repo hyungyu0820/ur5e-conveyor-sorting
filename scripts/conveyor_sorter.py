@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Sort items arriving on the conveyor into colour bins, forever (Ctrl+C to stop).
 
-Start the cell first:  bash run_sim.sh ur5e scene:=conveyor
+Start the cell first:  UR_WRIST_CAMERA_MOUNT=side bash run_sim.sh ur5e scene:=conveyor
+(this program aims the camera for the side mount; its watch pose was not tuned for the others)
 Then:                  ros2 run ur_pick_place conveyor_sorter.py [--cycles N]
 
 Cycle:
@@ -26,7 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import color_detector  # noqa: E402
 import conveyor_layout as layout  # noqa: E402
 import ur_kinematics as kin  # noqa: E402
-from pick_place import GRASP_Z, GRIPPER_CLOSED, GRIPPER_OPEN, HOME, PickPlace  # noqa: E402
+from pick_place import GRASP_Z, GRIPPER_CLOSED, GRIPPER_OPEN, HOME, PickPlace, lock_arm  # noqa: E402
 
 # the camera sits 5.5 cm to the side of the TCP (tool -y in the world at YAW = -pi/2),
 # so this TCP pose centres the light curtain in the image, ~30 cm above the belt
@@ -206,6 +207,7 @@ def main():
     parser.add_argument("--rule", help="natural-language sorting rule for --detector gemini")
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])
 
+    arm_lock = lock_arm()  # noqa: F841
     rclpy.init()
     node = ConveyorSorter(color_detector.detect)
     if args.detector == "gemini":

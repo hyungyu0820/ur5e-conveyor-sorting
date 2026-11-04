@@ -19,11 +19,13 @@ source ~/ros2_ws/install/setup.bash
 for i in $(seq 1 60); do timeout 3 ros2 topic echo /conveyor/encoder --once >/dev/null 2>&1 && break; sleep 1; done
 [ "$RATE" != "1" ] && gz physics -u $(python3 -c "print(int(1000*$RATE))")
 T1=$(date +%s)
+python3 ~/ros2_ws/install/ur_pick_place/lib/ur_pick_place/score_bins.py > $OUT/score.out 2>&1 &
+SCORE=$!
 timeout 900 ros2 run ur_pick_place tracking_sorter.py --cycles $ITEMS --plan-margin $MARGIN > $OUT/sorter.out 2>&1
 echo "sorter exit $?, sorting took $(( $(date +%s)-T1 )) s real, whole run $(( $(date +%s)-T0 )) s"
 timeout 5 gz stats -d 2 2>/dev/null | tail -1
-gz physics -u 1000 >/dev/null 2>&1  # back to real time so grading sees a slow-moving belt
-timeout 120 ros2 run ur_pick_place score_bins.py --items $((ITEMS+2)) 2>/dev/null | tail -1
+kill -TERM $SCORE; wait $SCORE 2>/dev/null
+tail -1 $OUT/score.out
 bash $DIR/stop_sim.sh >/dev/null 2>&1
 grep -E "ERROR|process has died" $OUT/sorter.out $OUT/sim.out | grep -v hold_joints | cut -c1-170 | head -5
 python3 - <<P

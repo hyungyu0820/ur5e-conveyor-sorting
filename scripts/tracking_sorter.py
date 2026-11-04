@@ -20,6 +20,7 @@ import json
 import math
 import os
 import sys
+import time
 from collections import deque
 from dataclasses import dataclass, field
 
@@ -39,7 +40,7 @@ import color_detector  # noqa: E402
 import conveyor_layout as layout  # noqa: E402
 import ur_kinematics as kin  # noqa: E402
 from conveyor_sorter import DROP_GRID, seed_towards  # noqa: E402
-from pick_place import GRASP_Z, GRIPPER_CLOSED, GRIPPER_OPEN, PickPlace, to_duration  # noqa: E402
+from pick_place import GRASP_Z, GRIPPER_CLOSED, GRIPPER_OPEN, PickPlace, lock_arm, to_duration  # noqa: E402
 
 ITEM_TOP_Z = layout.BELT_TOP + 0.04  # the camera looks at the top face of a cube
 TRAVEL_Z = GRASP_Z + 0.10   # height for moves, also the height above an item before descending
@@ -357,8 +358,11 @@ class TrackingSorter(PickPlace):
     def run(self, cycles):
         self.wait_ready()
         self.get_logger().info("waiting for the belt encoder and the sim clock ...")
+        end = time.time() + 30.0
         while len(self.encoder) < 2 or self.now() == 0.0:
             rclpy.spin_once(self, timeout_sec=0.1)
+            if time.time() > end:
+                raise RuntimeError("벨트 엔코더나 시뮬레이션 시계가 없습니다. scene:=conveyor로 실행했는지 확인하세요.")
         self.gripper_pub.publish(self._gripper_msg(GRIPPER_OPEN))
         self.go_ready()
         sim_start = self.now()
@@ -403,6 +407,7 @@ def main():
     parser.add_argument("--plan-margin", type=float, default=PLAN_MARGIN,
                         help="sim seconds kept for planning before a trajectory starts; raise it in faster-than-real-time runs")
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])
+    arm_lock = lock_arm()  # noqa: F841
     rclpy.init()
     node = TrackingSorter(args.joint_speed, args.joint_accel, args.plan_margin)
     try:

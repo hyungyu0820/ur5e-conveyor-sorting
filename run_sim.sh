@@ -9,9 +9,15 @@ UR_TYPE=${1:-ur5e}
 shift || true
 
 # 0) 다른 터미널에서 이미 시뮬레이션이 돌고 있으면 건드리지 않고 종료
+#    단, Gazebo 서버가 죽고 launch만 남은 경우는 고장 상태이므로 정리하고 새로 시작
 if pgrep -f "^/usr/bin/python3 [^ ]*/ros2 launch ur_pick_place" >/dev/null; then
-  echo "이미 시뮬레이션이 실행 중입니다. 그 터미널에서 Ctrl+C로 끈 뒤 다시 실행하세요." >&2
-  exit 1
+  sleep 5  # 막 시작한 launch라면 그사이 서버가 뜸
+  if pgrep -x gzserver >/dev/null; then
+    echo "이미 시뮬레이션이 실행 중입니다. 그 터미널에서 Ctrl+C로 끈 뒤 다시 실행하세요." >&2
+    exit 1
+  fi
+  echo "Gazebo 서버 없이 launch만 남아 있어 정리합니다."
+  STOP_SIM_KEEP=$$ bash "$(dirname "$0")/stop_sim.sh"
 fi
 
 # 1) 이전 실행에서 남은 Gazebo 프로세스 정리 (남아 있으면 새 gzserver가 바로 죽음)

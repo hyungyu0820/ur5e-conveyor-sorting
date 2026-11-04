@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
 """Grade a sorting run from Gazebo's true object positions; the sorter never sees these.
 
-Item names contain the true colour (item_0007_red), so an item counts as correct when it lies
-inside the bin of that colour. Run while the simulation is still up:
-  ros2 run ur_pick_place score_bins.py --items 30
+Start it before the sorter and stop it after (Ctrl+C or SIGTERM):
+  ros2 run ur_pick_place score_bins.py
+
+Item names contain the true colour (item_0007_red), so an item counts as correct when it was last
+seen inside the bin of that colour. Items the feeder deleted to keep Gazebo fast keep their last
+position, so long runs can be graded completely.
 """
-import argparse
+import json
 import os
-import subprocess
+import signal
 import sys
+
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import conveyor_layout as layout  # noqa: E402
-from pick_place import object_position  # noqa: E402
 
 BIN_HALF = 0.11
 BIN_TOP = 0.10
@@ -24,22 +30,25 @@ def where(x, y, z):
             if abs(x - bx) < BIN_HALF and abs(y - by) < BIN_HALF:
                 return name
         return "floor"
-    return "belt" if abs(x - layout.BELT_X) < 0.1 else "elsewhere"
+    return "belt" if abs(x - layout.BELT_X) < 0.1 else "in the air"
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--items", type=int, default=30, help="check item numbers 0 .. N-1")
-    args = parser.parse_args()
-    correct = wrong = 0
-    other = {}
-    for n in range(args.items):
-        for color in layout.GAZEBO_COLORS:
-            name = f"item_{n:04d}_{color}"
-            try:
-                pos = object_position(name)
-            except (RuntimeError, ValueError, subprocess.TimeoutExpired):
+class Scorer(Node):
+    def __init__(self):
+        super().__init__("score_bins")
+        self.last = {}
+        self.create_subscription(String, "/sim_truth/items", self._on_items, 10)
+
+    def _on_items(self, msg):
+        self.last.update(json.loads(msg.data))
+
+    def summary(self):
+        correct = wrong = 0
+        other = {}
+        for name, pos in sorted(self.last.items()):
+            if not name.startswith("item_"):
                 continue
+            color = name.rsplit("_", 1)[1]
             place = where(*pos)
             print(f"{name}: {place} ({pos[0]:.3f}, {pos[1]:.3f}, {pos[2]:.3f})")
             if place == color:
@@ -48,7 +57,23 @@ def main():
                 wrong += 1
             else:
                 other[place] = other.get(place, 0) + 1
-    print(f"correct bin {correct}, wrong bin {wrong}, elsewhere {other}")
+        print(f"correct bin {correct}, wrong bin {wrong}, elsewhere {other}", flush=True)
+
+
+def stop(*_):
+    raise KeyboardInterrupt
+
+
+def main():
+    signal.signal(signal.SIGTERM, stop)
+    rclpy.init()
+    node = Scorer()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    node.summary()
+    rclpy.try_shutdown()
 
 
 if __name__ == "__main__":

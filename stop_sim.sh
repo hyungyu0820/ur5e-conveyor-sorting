@@ -11,7 +11,8 @@ for pattern in "^bash .*run_sim.sh" "^/usr/bin/python3 [^ ]*/ros2 launch ur_pick
   "lib/ur_pick_place/conveyor_scene.py" "lib/robot_state_publisher/robot_state_publisher" \
   "lib/controller_manager/spawner" "gazebo_ros/spawn_entity.py"; do
   for p in $(pgrep -f "$pattern"); do
-    [ "$p" != "$$" ] && kill -9 "$p" 2>/dev/null
+    # STOP_SIM_KEEP: run_sim.sh calls this script to clean up and must survive it
+    [ "$p" != "$$" ] && [ "$p" != "${STOP_SIM_KEEP:-}" ] && kill -9 "$p" 2>/dev/null
   done
 done
 pkill -9 -x gzserver 2>/dev/null

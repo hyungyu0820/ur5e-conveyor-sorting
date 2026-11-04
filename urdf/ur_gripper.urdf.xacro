@@ -30,11 +30,35 @@
   <xacro:parallel_gripper prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)tool0"/>
 
   <!-- camera sits on the side of the gripper base, looking along the tool z-axis -->
-  <!-- UR_WRIST_CAMERA=false leaves it out of runs that do not use it (rendering costs a lot of CPU) -->
+  <!-- UR_WRIST_CAMERA=false leaves it out of runs that do not use it (rendering costs a lot of CPU).
+       UR_WRIST_CAMERA_MOUNT picks where it sits, for comparing views:
+         side   : beside the gripper base, looking along the tool
+         raised : behind the flange, tilted towards the fingertips
+         raised_wide (default): further out, so the arm blocks little of the view and the item
+                  stays visible between the fingers until the grasp (docs/media/wrist_camera_mounts.png)
+         center : between the fingers, on the tool axis -->
+  <xacro:property name="wrist_camera_mount" value="$(optenv UR_WRIST_CAMERA_MOUNT raised_wide)"/>
   <xacro:if value="$(optenv UR_WRIST_CAMERA true)">
-    <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
-      <origin xyz="0.055 0 0.02" rpy="0 ${-pi/2} 0"/>
-    </xacro:wrist_camera>
+    <xacro:if value="${wrist_camera_mount == 'side'}">
+      <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
+        <origin xyz="0.055 0 0.02" rpy="0 ${-pi/2} 0"/>
+      </xacro:wrist_camera>
+    </xacro:if>
+    <xacro:if value="${wrist_camera_mount == 'raised'}">
+      <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
+        <origin xyz="0.08 0 -0.06" rpy="0 -2.089 0"/>
+      </xacro:wrist_camera>
+    </xacro:if>
+    <xacro:if value="${wrist_camera_mount == 'raised_wide'}">
+      <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
+        <origin xyz="0.11 0 -0.03" rpy="0 -2.356 0"/>
+      </xacro:wrist_camera>
+    </xacro:if>
+    <xacro:if value="${wrist_camera_mount == 'center'}">
+      <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
+        <origin xyz="0 0 0.045" rpy="0 ${-pi/2} 0"/>
+      </xacro:wrist_camera>
+    </xacro:if>
   </xacro:if>
 
 </robot>

@@ -7,6 +7,9 @@
 //   ros2 topic echo /conveyor/running                                      -> std_msgs/Bool
 //   ros2 topic echo /conveyor/object_at_sensor                             -> std_msgs/Bool
 //   ros2 topic echo /conveyor/encoder                                      -> sensor_msgs/JointState
+//   ros2 topic echo /sim_truth/items                                       -> std_msgs/String
+// sim_truth is JSON {model name: [x, y, z]} for grading runs; a real robot has no such thing and
+// the sorters never read it.
 // The encoder works like one on a real belt: position = belt travel [m], velocity = belt speed [m/s].
 //
 // ROS parameters of this node (can be changed at run time):
@@ -22,6 +25,7 @@
 #include <atomic>
 #include <memory>
 #include <set>
+#include <sstream>
 #include <string>
 
 #include <gazebo/common/Events.hh>
@@ -31,6 +35,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joint_state.hpp>
 #include <std_msgs/msg/bool.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <std_srvs/srv/set_bool.hpp>
 
 namespace ur_pick_place
@@ -58,6 +63,7 @@ public:
     running_pub_ = node_->create_publisher<std_msgs::msg::Bool>("conveyor/running", 10);
     sensor_pub_ = node_->create_publisher<std_msgs::msg::Bool>("conveyor/object_at_sensor", 10);
     encoder_pub_ = node_->create_publisher<sensor_msgs::msg::JointState>("conveyor/encoder", 10);
+    truth_pub_ = node_->create_publisher<std_msgs::msg::String>("sim_truth/items", 10);
     power_srv_ = node_->create_service<std_srvs::srv::SetBool>(
       "conveyor/power",
       [this](const std_srvs::srv::SetBool::Request::SharedPtr req,
@@ -128,6 +134,24 @@ private:
       msg.data = at_sensor;
       sensor_pub_->publish(msg);
     }
+    if ((now - last_truth_pub_).Double() >= 0.5) {
+      last_truth_pub_ = now;
+      std::ostringstream json;
+      json << "{";
+      bool first = true;
+      for (const auto & m : world_->Models()) {
+        if (m == model_ || m->IsStatic() || excluded_.count(m->GetName())) {
+          continue;
+        }
+        const auto p = m->WorldPose().Pos();
+        json << (first ? "" : ",") << "\"" << m->GetName() << "\":[" << p.X() << "," << p.Y() << "," << p.Z() << "]";
+        first = false;
+      }
+      json << "}";
+      std_msgs::msg::String msg;
+      msg.data = json.str();
+      truth_pub_->publish(msg);
+    }
     if ((now - last_encoder_pub_).Double() >= 0.02) {  // encoder at 50 Hz
       last_encoder_pub_ = now;
       sensor_msgs::msg::JointState enc;
@@ -146,6 +170,7 @@ private:
   rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr running_pub_;
   rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr sensor_pub_;
   rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr encoder_pub_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr truth_pub_;
   rclcpp::Service<std_srvs::srv::SetBool>::SharedPtr power_srv_;
   std::set<std::string> excluded_;
   double length_{1.4}, width_{0.2}, height_{0.2}, speed_{0.1}, sensor_y_{0.0}, encoder_{0.0};
@@ -153,7 +178,7 @@ private:
   // written by the service callback (ROS thread) and the physics update
   std::atomic<bool> running_{true};
   std::atomic<bool> at_sensor_prev_{false};
-  gazebo::common::Time last_pub_, last_update_, last_encoder_pub_;
+  gazebo::common::Time last_pub_, last_update_, last_encoder_pub_, last_truth_pub_;
 };
 
 GZ_REGISTER_MODEL_PLUGIN(ConveyorBelt)
