@@ -105,8 +105,9 @@ def trapezoid(distance, v, a):
 
 
 class TrackingSorter(PickPlace):
-    def __init__(self, v_max, a_max):
+    def __init__(self, v_max, a_max, plan_margin):
         super().__init__()
+        self.plan_margin = plan_margin
         self.set_parameters([Parameter("use_sim_time", Parameter.Type.BOOL, True)])
         self.v_max, self.a_max = v_max, a_max
         self.encoder = deque(maxlen=200)  # (time, position)
@@ -115,6 +116,7 @@ class TrackingSorter(PickPlace):
         self.next_id = 0
         self.placed = {}
         self.results = []
+        self.last_grasp = ""
         self.missed = 0
         w, _ = layout.BELT_CAMERA_SIZE
         self.focal = (w / 2) / math.tan(layout.BELT_CAMERA_HFOV / 2)
@@ -240,7 +242,7 @@ class TrackingSorter(PickPlace):
     # ---------- task ----------
     def intercept(self, track):
         """Where and when the arm can meet the item: (start, y, q above the item, move time)."""
-        start = self.now() + PLAN_MARGIN
+        start = self.now() + self.plan_margin
         q0 = self.q.copy()
         duration = 1.0
         y, q = 0.0, q0
@@ -285,6 +287,7 @@ class TrackingSorter(PickPlace):
             (t_above + DESCEND_TIME + CLOSE_TIME, attach),
         ])
         res = grasp["res"]
+        self.last_grasp = res.message
         return "ok" if res.success else res.message
 
     def _gripper_msg(self, travel):
@@ -307,7 +310,7 @@ class TrackingSorter(PickPlace):
         dx, dy = DROP_GRID[self.placed.get(track.label, 0) % len(DROP_GRID)]
         q_bin = self.ik_at(bx + dx, by + dy, TRAVEL_Z, seed_towards(bx + dx, by + dy))
         transport, _ = self.joint_move(q_top, q_bin, LIFT_TIME)
-        self.send(lift + transport, self.now() + PLAN_MARGIN)
+        self.send(lift + transport, self.now() + self.plan_margin)
         self.trigger(self.detach_cli)
         self.gripper_pub.publish(self._gripper_msg(GRIPPER_OPEN))
         self.sleep(RELEASE_TIME)
@@ -318,13 +321,13 @@ class TrackingSorter(PickPlace):
         self.gripper_pub.publish(self._gripper_msg(GRIPPER_OPEN))
         tool = kin.fk(self.q)[:3, 3]
         lift, _ = self.lift_points(tool[0], tool[1])
-        self.send(lift, self.now() + PLAN_MARGIN)
+        self.send(lift, self.now() + self.plan_margin)
 
     def go_ready(self):
         q = self.ik_at(*READY, seed_towards(READY[0], READY[1]))
         points, _ = self.joint_move(self.q, q)
         if points:
-            self.send(points, self.now() + PLAN_MARGIN)
+            self.send(points, self.now() + self.plan_margin)
 
     def report(self, sim_start):
         elapsed = self.now() - sim_start
@@ -338,6 +341,7 @@ class TrackingSorter(PickPlace):
             "failed": [r for r in self.results if r["result"] != "ok"],
             "missed": self.missed,
             "placed": self.placed,
+            "label_correct": sum(r["label_correct"] for r in self.results),
             "mean_cycle_s": float(np.mean(cycles)) if cycles else None,
             "max_cycle_s": float(np.max(cycles)) if cycles else None,
             "sim_elapsed_s": elapsed,
@@ -377,8 +381,11 @@ class TrackingSorter(PickPlace):
                 self.place(track)
             else:
                 self.recover_empty()
+            # the plugin names what it really grasped (item_0007_red): check the camera's colour against it
             entry = {
                 "id": track.id, "label": track.label, "result": result, "t_done": self.now(),
+                "grasped": self.last_grasp,
+                "label_correct": result == "ok" and f"_{track.label}::" in self.last_grasp,
                 "camera_speed": track.camera_speed(), "camera_hits": track.hits,
             }
             self.results.append(entry)
@@ -393,9 +400,11 @@ def main():
     parser.add_argument("--cycles", type=int, default=0, help="stop after N items (0 = forever)")
     parser.add_argument("--joint-speed", type=float, default=math.pi, help="joint speed limit [rad/s]")
     parser.add_argument("--joint-accel", type=float, default=3.0, help="joint acceleration limit [rad/s^2]")
+    parser.add_argument("--plan-margin", type=float, default=PLAN_MARGIN,
+                        help="sim seconds kept for planning before a trajectory starts; raise it in faster-than-real-time runs")
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])
     rclpy.init()
-    node = TrackingSorter(args.joint_speed, args.joint_accel)
+    node = TrackingSorter(args.joint_speed, args.joint_accel, args.plan_margin)
     try:
         node.run(args.cycles)
     except KeyboardInterrupt:

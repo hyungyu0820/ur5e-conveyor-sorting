@@ -30,8 +30,11 @@
   <xacro:parallel_gripper prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)tool0"/>
 
   <!-- camera sits on the side of the gripper base, looking along the tool z-axis -->
-  <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
-    <origin xyz="0.055 0 0.02" rpy="0 ${-pi/2} 0"/>
-  </xacro:wrist_camera>
+  <!-- UR_WRIST_CAMERA=false leaves it out of runs that do not use it (rendering costs a lot of CPU) -->
+  <xacro:if value="$(optenv UR_WRIST_CAMERA true)">
+    <xacro:wrist_camera prefix="$(arg tf_prefix)" parent="$(arg tf_prefix)gripper_base_link">
+      <origin xyz="0.055 0 0.02" rpy="0 ${-pi/2} 0"/>
+    </xacro:wrist_camera>
+  </xacro:if>
 
 </robot>

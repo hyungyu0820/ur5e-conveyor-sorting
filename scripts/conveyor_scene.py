@@ -68,7 +68,7 @@ class ConveyorScene(Node):
         self.bins_done = False
 
         self.create_subscription(JointState, "/conveyor/encoder", self._on_encoder, 10)
-        self.create_timer(0.1, self._tick)
+        self.create_timer(0.02, self._tick)  # wall clock: keeps the spacing exact when the simulation runs fast
 
     def _on_encoder(self, msg):
         self.encoder = msg.position[0]

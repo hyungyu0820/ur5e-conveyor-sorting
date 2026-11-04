@@ -7,6 +7,7 @@ inside the bin of that colour. Run while the simulation is still up:
 """
 import argparse
 import os
+import subprocess
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -37,7 +38,7 @@ def main():
             name = f"item_{n:04d}_{color}"
             try:
                 pos = object_position(name)
-            except (RuntimeError, ValueError):
+            except (RuntimeError, ValueError, subprocess.TimeoutExpired):
                 continue
             place = where(*pos)
             print(f"{name}: {place} ({pos[0]:.3f}, {pos[1]:.3f}, {pos[2]:.3f})")
