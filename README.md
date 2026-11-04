@@ -1,20 +1,24 @@
 # UR5e 컨베이어 비전 분류 셀 (ROS 2 Humble · Gazebo)
 
-> 컨베이어로 끝없이 들어오는 물건을 협동로봇 UR5e가 **손목 카메라로 인식**해서 **색깔별 분류함으로 분류**하는 물류 공정 시뮬레이션입니다.
-> *UR5e vision-based conveyor sorting cell in ROS 2 Humble + Gazebo Classic.*
+> 컨베이어로 끝없이 들어오는 물건을 협동로봇 UR5e가 **벨트를 멈추지 않고 카메라로 인식해 집어서** **색깔별 분류함으로 분류**하는 물류 공정 시뮬레이션입니다.
+> *UR5e vision-based conveyor tracking and sorting cell in ROS 2 Humble + Gazebo Classic.*
 
-![컨베이어 분류 시연](docs/media/conveyor_sorting.gif)
+![벨트 추적 분류 시연](docs/media/conveyor_tracking.gif)
 
-<sub>실제 속도보다 약 10배 빠르게 재생됨 (소프트웨어 렌더링 환경에서 녹화)</sub>
+<sub>벨트 10 cm/s, 물건 간격 50 cm, 실제 속도로 재생</sub>
 
 ## 결과 요약
 
-| 항목 | 결과 |
-|---|---|
-| 연속 분류 정확도 | **12 / 12 (100%)**: 물건 이름의 정답 색과 실제로 들어간 분류함을 Gazebo 좌표로 자동 채점 |
-| 카메라 위치 추정 오차 | **약 1 mm**: 인식 (0.499, -0.019) / 실제 (0.500, -0.020) m |
-| 사이클 타임 | 물건 1개당 **약 19초** (인식 → 집기 → 분류 → 복귀) |
-| 공급 | 무한 공급 (벨트 25 cm 이동마다 1개, 오래된 물건 자동 정리) |
+| 항목 | 이전 (물건마다 벨트 정지) | 지금 (벨트 추적) |
+|---|---|---|
+| 물건 1개 처리 시간 | 약 19초 | **5.13초** |
+| 시간당 처리량 | 약 190개 | **약 700개** |
+| 분류 정확도 | 12 / 12 | **40 / 40** (Gazebo 실제 위치로 채점) |
+| 놓친 물건 | 0 | **0** |
+
+벨트 10 cm/s, 물건 간격 50 cm 기준입니다. 시험한 조건 중 놓침 없이 처리량이 가장 높았지만 여유는 거의 없습니다. 단색 큐브를 쓴 시뮬레이션 값이며 동역학은 반영하지 않았습니다.
+
+아래 사진은 벨트 정지 방식일 때의 화면입니다.
 
 | 전체 셀 | 로봇 손목 카메라의 시점 (인식 결과) |
 |---|---|
@@ -139,11 +143,14 @@ git clone https://github.com/hyungyu0820/ur5e-conveyor-sorting.git ur_pick_place
 git clone -b humble https://github.com/UniversalRobots/Universal_Robots_ROS2_Gazebo_Simulation.git
 
 # 2) 컨베이어 분류 셀 실행 (빌드 포함)
-bash ~/ros2_ws/src/ur_pick_place/run_sim.sh ur5e scene:=conveyor
+bash ~/ros2_ws/src/ur_pick_place/run_sim.sh ur5e scene:=conveyor continuous:=true belt_speed:=0.1 item_spacing:=0.5
 
-# 3) 다른 터미널에서 분류 시작
+# 3) 다른 터미널에서 분류 시작 (Ctrl+C로 종료, --cycles N이면 N개 후 종료)
 source ~/ros2_ws/install/setup.bash
-ros2 run ur_pick_place conveyor_sorter.py
+ros2 run ur_pick_place tracking_sorter.py
+
+# 끝낼 때
+bash ~/ros2_ws/src/ur_pick_place/stop_sim.sh
 ```
 
 단일 픽앤플레이스, 물건 생성, 토픽 목록, 문제 해결 방법은 **[사용 설명서 (docs/usage.md)](docs/usage.md)** 를 참고하세요.
@@ -179,6 +186,8 @@ ur_pick_place/
 **현재 한계**
 - 잡기는 물리 마찰이 아니라 고정 joint 방식입니다. 시뮬레이터의 position 제어 특성 때문이며, 실기에서는 실제 그리퍼의 힘 제어가 필요합니다.
 - 인식은 단색 큐브용 색 임계값 방식이고, 물체 방향(yaw)은 정렬돼 있다고 가정합니다.
+- 관절 속도와 가속도를 궤적에 직접 제한했고 가속도는 가정값입니다. 동역학은 반영하지 않아 실제 로봇의 사이클은 달라질 수 있습니다.
+- 시뮬레이션에 사람이 없고, 협동 안전 기능(충돌 감지, 속도 제한)은 구현하지 않았습니다.
 - Gazebo Classic은 2025년 1월에 지원이 종료되었습니다.
 
 **로드맵**

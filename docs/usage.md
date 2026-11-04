@@ -75,6 +75,22 @@ ros2 run rqt_image_view rqt_image_view /wrist_camera/image_raw
 - `gripper_tcp` : 손가락 끝 사이 중심 (tool0 기준 z +8 cm) — MoveIt 엔드이펙터로 사용 예정
 - `camera_optical_frame` : 카메라 광학 좌표계 (z = 보는 방향 = 그리퍼 방향)
 
+## 벨트를 멈추지 않는 분류 (기본)
+
+```bash
+bash run_sim.sh ur5e scene:=conveyor continuous:=true belt_speed:=0.1 item_spacing:=0.5   # 터미널 1
+ros2 run ur_pick_place tracking_sorter.py --cycles 10                                      # 터미널 2
+ros2 run ur_pick_place score_bins.py                                                       # 분류 전에 켜 두면 끝낼 때 채점
+bash stop_sim.sh                                                                           # 전체 종료
+```
+
+- 결과: `~/ros2_ws/log/sim/tracking_result.json`
+- 손목 카메라: `UR_WRIST_CAMERA=false`면 끔(벨트 추적에는 불필요), `UR_WRIST_CAMERA_MOUNT=side|raised|raised_wide|center`로 위치 선택(기본 `raised_wide`)
+- 시뮬레이션 없는 검사: `python3 tools/check_kinematics.py`
+- 자동 시험: `bash tools/trial.sh 40 --rate 2 belt_speed:=0.10 item_spacing:=0.5` (반복 측정은 2배속까지 1배속과 비슷했고, 4배속은 결과가 왜곡됨. 최종 수치는 `--rate 1`)
+
+벨트 정지 방식(`conveyor_sorter.py`)은 `UR_WRIST_CAMERA_MOUNT=side`로 실행하세요. 새 분류함 배치와 기본 벨트 설정에서는 다시 검증하지 않았습니다.
+
 ## 컨베이어 분류 셀 (물류 시연)
 ```bash
 bash ~/ros2_ws/src/ur_pick_place/run_sim.sh ur5e scene:=conveyor     # 터미널 1
