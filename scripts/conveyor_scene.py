@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Sorting cell: spawns the colour bins once, then feeds random items onto the conveyor forever.
 
-A new item is dropped every ITEM_SPACING metres of belt travel, so items queue up with even
-gaps while the belt is stopped at the light curtain. To keep Gazebo fast, the oldest items
+A new item is dropped every item_spacing metres of belt travel (read from the belt encoder,
+so the gap does not depend on how fast the simulation runs). To keep Gazebo fast, the oldest items
 (already sorted into the bins) are deleted once more than --max-items exist.
 
 Item names contain their kind and true colour (item_0007_red, long_0008_blue, pair_0009a_red,
@@ -28,7 +28,7 @@ from geometry_msgs.msg import Pose
 from rcl_interfaces.msg import Parameter, ParameterType, ParameterValue
 from rcl_interfaces.srv import SetParameters
 from rclpy.node import Node
-from std_msgs.msg import Bool
+from sensor_msgs.msg import JointState
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import conveyor_layout as layout  # noqa: E402
@@ -42,11 +42,16 @@ def read_model(name):
 
 
 class ConveyorScene(Node):
-    def __init__(self, max_items, seed, faults):
+    def __init__(self, max_items, seed, faults, continuous, belt_speed, item_spacing):
         super().__init__("conveyor_scene")
         self.max_items = max_items
         self.rng = random.Random(seed)
         self.faults = faults
+        self.continuous = continuous
+        self.belt_speed = belt_speed
+        self.item_spacing = item_spacing
+        self.belt_params = self.create_client(SetParameters, "/conveyor_belt/set_parameters")
+        self.belt_set = False
         self.cube_sdf = read_model("cube")
         self.long_sdf = read_model("long_box")
         self.bin_sdf = read_model("bin")
@@ -55,19 +60,18 @@ class ConveyorScene(Node):
         self.spawn_cli = self.create_client(SpawnEntity, "/spawn_entity")
         self.delete_cli = self.create_client(DeleteEntity, "/delete_entity")
 
-        self.running = None  # None until the conveyor plugin publishes, i.e. the belt exists
-        self.travel = layout.ITEM_SPACING  # spawn the first item right away
+        self.encoder = None  # None until the conveyor plugin publishes, i.e. the belt exists
+        self.last_item_at = None  # encoder value at the last spawn
         self.count = 0
         self.items = deque()
         self.pending = None  # in-flight service call
         self.bins_done = False
 
-        self.create_subscription(Bool, "/conveyor/running", self._on_running, 10)
-        self.period = 0.1
-        self.create_timer(self.period, self._tick)
+        self.create_subscription(JointState, "/conveyor/encoder", self._on_encoder, 10)
+        self.create_timer(0.1, self._tick)
 
-    def _on_running(self, msg):
-        self.running = msg.data
+    def _on_encoder(self, msg):
+        self.encoder = msg.position[0]
 
     def _spawn(self, name, sdf, x, y, z, yaw=0.0):
         pose = Pose()
@@ -84,6 +88,19 @@ class ConveyorScene(Node):
         )
         self.faults_set = True
         self.get_logger().info(f"gripper faults: slip {layout.SLIP_RATE:.0%}, drop {layout.DROP_RATE:.0%}")
+
+    def _set_belt(self):
+        self.belt_params.call_async(
+            SetParameters.Request(parameters=[
+                Parameter(name="speed", value=ParameterValue(type=ParameterType.PARAMETER_DOUBLE, double_value=self.belt_speed)),
+                Parameter(name="stop_at_sensor", value=ParameterValue(type=ParameterType.PARAMETER_BOOL, bool_value=not self.continuous)),
+            ])
+        )
+        self.belt_set = True
+        self.get_logger().info(
+            f"belt: {self.belt_speed:.3f} m/s, item every {self.item_spacing:.2f} m, "
+            f"{'never stops' if self.continuous else 'stops at the light curtain'}"
+        )
 
     def _cube(self, color):
         return self.cube_sdf.replace("Gazebo/Red", f"Gazebo/{color}")
@@ -127,7 +144,7 @@ class ConveyorScene(Node):
         return [name]
 
     def _tick(self):
-        if not self.spawn_cli.service_is_ready() or self.running is None:
+        if not self.spawn_cli.service_is_ready() or self.encoder is None:
             return
         if self.pending is not None and not self.pending.done():
             return
@@ -144,9 +161,12 @@ class ConveyorScene(Node):
         if not self.faults_set and self.gripper_params.service_is_ready():
             self._set_gripper_faults()
 
-        if self.running:
-            self.travel += layout.BELT_SPEED * self.period
-        if self.travel < layout.ITEM_SPACING:
+        if not self.belt_set:
+            if self.belt_params.service_is_ready():
+                self._set_belt()
+            return
+
+        if self.last_item_at is not None and self.encoder - self.last_item_at < self.item_spacing:
             return
 
         if len(self.items) >= self.max_items:
@@ -157,7 +177,7 @@ class ConveyorScene(Node):
 
         self.items.extend(self._feed())
         self.count += 1
-        self.travel = 0.0
+        self.last_item_at = self.encoder
 
 
 def main():
@@ -165,9 +185,15 @@ def main():
     parser.add_argument("--max-items", type=int, default=30)
     parser.add_argument("--seed", type=int, default=None)
     parser.add_argument("--faults", default="false", help="true: mix in exceptions and gripper faults")
+    parser.add_argument("--continuous", default="false", help="true: the belt never stops at the light curtain")
+    parser.add_argument("--belt-speed", type=float, default=layout.BELT_SPEED)
+    parser.add_argument("--item-spacing", type=float, default=layout.ITEM_SPACING)
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])
     rclpy.init()
-    node = ConveyorScene(args.max_items, args.seed, args.faults.lower() == "true")
+    node = ConveyorScene(
+        args.max_items, args.seed, args.faults.lower() == "true",
+        args.continuous.lower() == "true", args.belt_speed, args.item_spacing,
+    )
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:

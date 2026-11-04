@@ -11,8 +11,10 @@
       <collision name="collision">
         <pose>0 0 0.1 0 0 0</pose>
         <geometry><box><size>0.2 1.2 0.2</size></box></geometry>
+        <!-- the plugin sets each item's velocity directly, so contact friction would only slow items
+             below the belt speed and the encoder would no longer tell where they are -->
         <surface>
-          <friction><ode><mu>0.5</mu><mu2>0.5</mu2></ode></friction>
+          <friction><ode><mu>0.0</mu><mu2>0.0</mu2></ode></friction>
         </surface>
       </collision>
       <visual name="belt_surface">
@@ -63,7 +65,7 @@
       <length>1.2</length>
       <width>0.2</width>
       <height>0.2</height>
-      <speed>0.1</speed>
+      <speed>0.05</speed>
       <sensor_y>0.15</sensor_y>
       <exclude_model>ur</exclude_model>
     </plugin>

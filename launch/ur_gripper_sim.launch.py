@@ -22,6 +22,9 @@ def generate_launch_description():
             description="conveyor scene: mix in exceptions (rotated long boxes, overlaps, unknown items) and gripper faults",
         ),
         DeclareLaunchArgument("seed", default_value="1", description="random seed for the item feeder and faults"),
+        DeclareLaunchArgument("continuous", default_value="false", description="conveyor scene: the belt never stops at the light curtain"),
+        DeclareLaunchArgument("belt_speed", default_value="0.05", description="conveyor scene: belt speed [m/s]"),
+        DeclareLaunchArgument("item_spacing", default_value="0.5", description="conveyor scene: distance between items [m]"),
         DeclareLaunchArgument(
             "scene", default_value="table",
             description="table: table + one cube; conveyor: conveyor belt, bins and an endless item feeder",
@@ -77,12 +80,18 @@ def generate_launch_description():
         spawn("table", 0.5, 0.0, 0.0, "table"),
         spawn("cube", 0.45, -0.25, 0.22, "table"),
         spawn("conveyor", 0.5, -0.15, 0.0, "conveyor"),
+        spawn("belt_camera", 0.50, -0.45, 0.85, "conveyor"),  # conveyor_layout.BELT_CAMERA
         # colour bins + endless items on the belt
         Node(
             package="ur_pick_place",
             executable="conveyor_scene.py",
             output="screen",
-            arguments=["--faults", LaunchConfiguration("faults"), "--seed", LaunchConfiguration("seed")],
+            arguments=[
+                "--faults", LaunchConfiguration("faults"), "--seed", LaunchConfiguration("seed"),
+                "--continuous", LaunchConfiguration("continuous"),
+                "--belt-speed", LaunchConfiguration("belt_speed"),
+                "--item-spacing", LaunchConfiguration("item_spacing"),
+            ],
             condition=scene_is("conveyor"),
         ),
     ]
