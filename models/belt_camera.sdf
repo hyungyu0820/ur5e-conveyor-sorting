@@ -3,6 +3,8 @@
   Fixed RGB camera looking straight down at the upstream part of the conveyor.
   Finds items before they reach the robot. Publishes /belt_camera/image_raw.
   Position and field of view must match conveyor_layout.BELT_CAMERA*.
+  A floor pole beside the belt holds it: the pole stays outside the image, out of the arm's reach
+  and clear of the bins. The model origin is the camera position.
 -->
 <sdf version="1.6">
   <model name="belt_camera">
@@ -30,6 +32,14 @@
           <frame_name>belt_camera</frame_name>
         </plugin>
       </sensor>
+    </link>
+    <link name="mount">
+      <collision name="base"><pose>0.30 0 -0.84</pose><geometry><box><size>0.10 0.30 0.02</size></box></geometry></collision>
+      <visual name="base"><pose>0.30 0 -0.84</pose><geometry><box><size>0.10 0.30 0.02</size></box></geometry><material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/DarkGrey</name></script></material></visual>
+      <collision name="pole"><pose>0.30 0 -0.41</pose><geometry><box><size>0.03 0.03 0.88</size></box></geometry></collision>
+      <visual name="pole"><pose>0.30 0 -0.41</pose><geometry><box><size>0.03 0.03 0.88</size></box></geometry><material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/DarkGrey</name></script></material></visual>
+      <collision name="arm"><pose>0.15 0 0.03</pose><geometry><box><size>0.33 0.03 0.03</size></box></geometry></collision>
+      <visual name="arm"><pose>0.15 0 0.03</pose><geometry><box><size>0.33 0.03 0.03</size></box></geometry><material><script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/DarkGrey</name></script></material></visual>
     </link>
   </model>
 </sdf>
