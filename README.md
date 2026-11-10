@@ -79,19 +79,28 @@ ros2 run ur_pick_place conveyor_sorter.py --detector gemini --rule "초록색 �
 - Gemini 호출이 실패하면 자동으로 색 인식으로 대신해서 라인이 멈추지 않습니다.
 - API 키는 `GEMINI_API_KEY` 환경 변수나 `~/.gemini_api_key` 파일에서 읽습니다(저장소에 넣지 않음).
 
-## 예외 처리 실험 (진행 중)
+## 예외 처리 실험 (멈추지 않는 벨트)
 
-현장에서 로봇팔 생산성을 결정하는 것은 평균 속도보다 **"얼마나 자주 멈추고, 얼마나 빨리 복구되나"**입니다. 이를 시뮬레이션에서 재현하고 개선하는 실험을 진행 중입니다.
+돌아간 긴 상자, 겹친 물건, 모르는 물건, 집기 미끄러짐 10%, 운반 중 떨어뜨림 5%를 섞어 넣고, 집기에 실패했을 때 로봇이 스스로 다시 집게 했습니다. 벨트가 멈추지 않으므로 "멈춘 시간" 대신 **제자리에 들어간 물건 수**로 비교합니다.
 
 ```bash
-bash run_sim.sh ur5e scene:=conveyor faults:=true seed:=1   # 예외 섞인 컨베이어
-bash stop_sim.sh                                           # 시뮬레이션 전체 종료
+bash tools/exception_trial.sh baseline 1     # 복구 없음 (tracking_sorter.py 그대로), seed 1
+bash tools/exception_trial.sh recovery 1     # 복구 있음 (recovery_sorter.py)
 ```
 
-- **예외 발생기 (완료):** 돌아간 긴 상자, 겹친 물건, 모르는 물건, 집기 미끄러짐 10%, 운반 중 떨어뜨림 5%. 잡힘 여부는 기하 조건으로 판정(폭 9cm 초과 · 물체 2개 → 실패)
-- **다음:** 벨트를 멈추지 않는 셀에 맞춰 비교 기준을 다시 정한 뒤, 지표 기록 → 측정 → 자동 복구 분류기 + Gemini 진단 → 비교 보고서
+| 시뮬레이션, 1배속, seed 1~3, 공급 90번 | 복구 없음 | 복구 있음 |
+|---|---|---|
+| 제자리에 들어간 물건 | 39 / 110 (35%) | **58 / 110 (53%)** |
+| 시간당 정상 분류 | 312개 | **464개** |
+| 다시 집어 성공 | 0 | 12번 (평균 2.0초) |
 
-자세한 과정은 [개발 일지 7장](docs/devlog.md#7-예외-처리-실험-준비-진행-중)에 있습니다.
+- 로봇은 그리퍼 물체 센서와 손목 카메라만 씁니다. 손목 카메라의 깊이 영상 한 장으로 물건 1개 / 긴 상자 / 붙은 2개 / 쌓인 2개를 가려, 미끄러지면 다시 집고 긴 상자는 그리퍼를 돌려 집습니다.
+- 겹친 물건 40개는 한 개도 건지지 못했습니다(알아채고 흘려보냄). 다시 집기는 물건이 집는 구간(4초) 안에 있을 때만 가능했습니다.
+- Gemini 진단 훅은 연습 모드(보낼 사진과 질문만 저장)로만 돌렸고, 실제 호출은 하지 않았습니다.
+
+![종류별 결과](docs/media/exception_sorted_by_kind.png)
+
+숫자와 측정 방법, 확인하지 못한 것은 [예외 처리 실험 보고서](docs/exception_nonstop_report.md)에, 과정은 [개발 일지 9장](docs/devlog.md)에 있습니다.
 
 ## 시스템 구성
 
@@ -169,6 +178,10 @@ ur_pick_place/
 ├── scripts/
 │   ├── conveyor_sorter.py      # 분류 로봇 (벨트 정지 방식)
 │   ├── tracking_sorter.py      # 분류 로봇 (벨트를 멈추지 않는 방식)
+│   ├── recovery_sorter.py      # 위에 실패 복구 규칙을 더한 것
+│   ├── wrist_check.py          # 손목 카메라로 물건 모양 재기
+│   ├── gemini_diagnosis.py     # 진단 훅 (기본은 호출 없이 기록만)
+│   ├── exception_metrics.py    # 예외 실험용 실제 기록 저장
 │   ├── score_bins.py           # Gazebo 실제 위치로 분류 결과 채점
 │   ├── conveyor_scene.py       # 분류함 생성 + 무한 공급
 │   ├── color_detector.py       # 인식 모듈 (교체 가능)
