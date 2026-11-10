@@ -15,6 +15,13 @@
 //   - the object is wider than the gripper opening along the closing axis (rotated long item)
 //   - random slip, probability slip_rate
 // A held object is dropped during transport with probability drop_rate.
+// Slip and drop are decided by a hash of (seed, object name, attempt number on that object), not by
+// a running random stream: the same object slips on the same attempt whatever else the robot did
+// before, so two control strategies can be compared on identical bad luck.
+//
+//   ros2 topic echo /sim_truth/grasp_events   -> std_msgs/String, JSON line per attach / fail / drop /
+//                                                release with the true reason. For grading only; a
+//                                                real gripper has no such thing and sorters must not read it.
 //
 // SDF parameters (see urdf/parallel_gripper.xacro); slip_rate, drop_rate and seed are also
 // ROS parameters of this node and can be changed at run time:
@@ -24,8 +31,10 @@
 //   <slip_rate> <drop_rate> <seed>
 
 #include <cmath>
+#include <cstdint>
+#include <map>
 #include <memory>
-#include <random>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -35,6 +44,7 @@
 #include <gazebo_ros/node.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/bool.hpp>
+#include <std_msgs/msg/string.hpp>
 #include <std_srvs/srv/trigger.hpp>
 
 namespace ur_pick_place
@@ -69,7 +79,7 @@ public:
     max_opening_ = sdf->Get<double>("max_opening", 0.09).first;
     node_->declare_parameter("slip_rate", sdf->Get<double>("slip_rate", 0.0).first);
     node_->declare_parameter("drop_rate", sdf->Get<double>("drop_rate", 0.0).first);
-    rng_.seed(static_cast<unsigned>(node_->declare_parameter("seed", sdf->Get<int>("seed", 1).first)));
+    node_->declare_parameter("seed", sdf->Get<int>("seed", 1).first);
 
     using Trigger = std_srvs::srv::Trigger;
     attach_srv_ = node_->create_service<Trigger>(
@@ -79,6 +89,7 @@ public:
       "grasp/detach",
       [this](const Trigger::Request::SharedPtr, Trigger::Response::SharedPtr res) { detach(*res); });
     holding_pub_ = node_->create_publisher<std_msgs::msg::Bool>("grasp/holding", 10);
+    events_pub_ = node_->create_publisher<std_msgs::msg::String>("sim_truth/grasp_events", 100);
     update_conn_ = gazebo::event::Events::ConnectWorldUpdateBegin(std::bind(&GraspAttacher::OnUpdate, this));
 
     RCLCPP_INFO(node_->get_logger(), "grasp attacher ready (palm: %s, opening %.3f m)", palm_name.c_str(), max_opening_);
@@ -86,7 +97,33 @@ public:
 
 private:
   double rate(const char * name) { return node_->get_parameter(name).as_double(); }
-  bool chance(double p) { return std::uniform_real_distribution<double>(0.0, 1.0)(rng_) < p; }
+
+  // uniform number in [0, 1) that depends only on (seed, object, attempt, salt)
+  double draw(const std::string & name, uint64_t attempt, uint64_t salt)
+  {
+    uint64_t h = 1469598103934665603ULL;  // FNV-1a of the name
+    for (unsigned char c : name) {
+      h ^= c;
+      h *= 1099511628211ULL;
+    }
+    const auto seed = static_cast<uint64_t>(node_->get_parameter("seed").as_int());
+    uint64_t z = h ^ (seed * 0x9E3779B97F4A7C15ULL) ^ (attempt * 0xBF58476D1CE4E5B9ULL) ^ (salt * 0x94D049BB133111EBULL);
+    z += 0x9E3779B97F4A7C15ULL;  // splitmix64 finaliser
+    z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9ULL;
+    z = (z ^ (z >> 27)) * 0x94D049BB133111EBULL;
+    z ^= z >> 31;
+    return static_cast<double>(z >> 11) * (1.0 / 9007199254740992.0);
+  }
+
+  void event(const std::string & what, const std::string & objects, const std::string & reason = "")
+  {
+    std::ostringstream json;
+    json << "{\"t\":" << world_->SimTime().Double() << ",\"event\":\"" << what << "\",\"objects\":[" << objects <<
+      "],\"reason\":\"" << reason << "\"}";
+    std_msgs::msg::String msg;
+    msg.data = json.str();
+    events_pub_->publish(msg);
+  }
 
   // width of a link along a world axis, from its collision shapes (box, cylinder, sphere)
   static double extentAlong(const gazebo::physics::LinkPtr & link, const Vector3d & axis)
@@ -144,18 +181,27 @@ private:
     }
 
     const double width = inside.empty() ? 0.0 : extentAlong(inside[0], closing);
+    std::string names;
+    for (const auto & l : inside) {
+      names += (names.empty() ? "\"" : ",\"") + l->GetScopedName() + "\"";
+    }
     std::string reason;
+    uint64_t attempt = 0;
     if (inside.empty()) {
       reason = "fail:nothing_between_fingers";
     } else if (inside.size() > 1) {
       reason = "fail:multiple_objects";
     } else if (width > max_opening_ - 0.002) {
       reason = "fail:too_wide";
-    } else if (chance(rate("slip_rate"))) {
-      reason = "fail:slipped";
+    } else {
+      attempt = ++attempts_[inside[0]->GetScopedName()];  // counts only grasps that could hold
+      if (draw(inside[0]->GetScopedName(), attempt, 1) < rate("slip_rate")) {
+        reason = "fail:slipped";
+      }
     }
     if (!reason.empty()) {
       res.message = reason;
+      event("grasp_fail", names, reason);
       RCLCPP_INFO(node_->get_logger(), "grasp %s (%zu object(s) in pinch region, width %.3f m)",
         reason.c_str(), inside.size(), width);
       return;
@@ -168,10 +214,11 @@ private:
     joint_->Init();
     held_name_ = obj->GetScopedName();
     // a dropped object falls out some time into the transport move
-    drop_at_ = chance(rate("drop_rate")) ?
-      world_->SimTime().Double() + std::uniform_real_distribution<double>(0.8, 2.5)(rng_) : -1.0;
+    drop_at_ = draw(held_name_, attempt, 2) < rate("drop_rate") ?
+      world_->SimTime().Double() + 0.8 + 1.7 * draw(held_name_, attempt, 3) : -1.0;
     res.success = true;
     res.message = "attached " + held_name_;
+    event("attached", names);
     RCLCPP_INFO(node_->get_logger(), "%s (width %.3f m, %zu collision(s))", res.message.c_str(), width,
       obj->GetCollisions().size());
   }
@@ -195,6 +242,7 @@ private:
     res.success = true;
     res.message = "released " + held_name_;
     RCLCPP_INFO(node_->get_logger(), "%s", res.message.c_str());
+    event("released", "\"" + held_name_ + "\"");
     release();
   }
 
@@ -203,6 +251,7 @@ private:
     const double now = world_->SimTime().Double();
     if (joint_ && drop_at_ > 0 && now >= drop_at_) {
       RCLCPP_INFO(node_->get_logger(), "dropped %s during transport", held_name_.c_str());
+      event("dropped", "\"" + held_name_ + "\"");
       release();
     }
     if (now - last_pub_ >= 0.05) {  // object sensor at 20 Hz
@@ -222,12 +271,13 @@ private:
   double max_opening_{0.09};
   double drop_at_{-1.0};
   double last_pub_{0.0};
-  std::mt19937 rng_;
+  std::map<std::string, uint64_t> attempts_;
   gazebo::event::ConnectionPtr update_conn_;
   gazebo_ros::Node::SharedPtr node_;
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr attach_srv_;
   rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr detach_srv_;
   rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr holding_pub_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr events_pub_;
 };
 
 GZ_REGISTER_MODEL_PLUGIN(GraspAttacher)

@@ -25,6 +25,8 @@ def generate_launch_description():
         DeclareLaunchArgument("continuous", default_value="false", description="conveyor scene: the belt never stops at the light curtain"),
         DeclareLaunchArgument("belt_speed", default_value="0.05", description="conveyor scene: belt speed [m/s]"),
         DeclareLaunchArgument("item_spacing", default_value="0.5", description="conveyor scene: distance between items [m]"),
+        DeclareLaunchArgument("feed_limit", default_value="0", description="conveyor scene: stop feeding after N feeds (0 = endless)"),
+        DeclareLaunchArgument("wait_start", default_value="false", description="conveyor scene: feed only after the sorter reports ready"),
         DeclareLaunchArgument(
             "scene", default_value="table",
             description="table: table + one cube; conveyor: conveyor belt, bins and an endless item feeder",
@@ -91,6 +93,7 @@ def generate_launch_description():
                 "--continuous", LaunchConfiguration("continuous"),
                 "--belt-speed", LaunchConfiguration("belt_speed"),
                 "--item-spacing", LaunchConfiguration("item_spacing"),
+                "--feed-limit", LaunchConfiguration("feed_limit"), "--wait-start", LaunchConfiguration("wait_start"),
             ],
             condition=scene_is("conveyor"),
         ),

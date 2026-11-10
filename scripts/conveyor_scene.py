@@ -12,9 +12,15 @@ Fault mode (--faults true, launch faults:=true) mixes in exceptions (layout.FAUL
 rotated long boxes, overlapping pairs (side by side or stacked) and unknown purple items,
 and sets the gripper's slip and drop rates (layout.SLIP_RATE, layout.DROP_RATE).
 
+For experiments (launch feed_limit:=N wait_start:=true): --feed-limit stops after N feeds (a pair
+counts as one), --wait-start holds the first item back until a sorter says it is ready on
+/feeder/start, so no run loses its first item to start-up timing. /feeder/status (JSON) lists what
+was fed; it is for grading and for knowing when a run is over.
+
 Started by: ros2 launch ur_pick_place ur_gripper_sim.launch.py scene:=conveyor
 """
 import argparse
+import json
 import math
 import os
 import random
@@ -29,6 +35,8 @@ from rcl_interfaces.msg import Parameter, ParameterType, ParameterValue
 from rcl_interfaces.srv import SetParameters
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
+from std_msgs.msg import Empty, String
+from std_srvs.srv import Empty as EmptySrv
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import conveyor_layout as layout  # noqa: E402
@@ -42,10 +50,14 @@ def read_model(name):
 
 
 class ConveyorScene(Node):
-    def __init__(self, max_items, seed, faults, continuous, belt_speed, item_spacing):
+    def __init__(self, max_items, seed, faults, continuous, belt_speed, item_spacing, feed_limit=0, wait_start=False):
         super().__init__("conveyor_scene")
-        self.max_items = max_items
+        self.max_items = max(max_items, 2 * feed_limit + 4)  # an experiment keeps every item for grading
+        self.seed = seed
         self.rng = random.Random(seed)
+        self.feed_limit = feed_limit
+        self.started = not wait_start
+        self.manifest = []  # what was fed: {slot, kind, names, encoder, ...}
         self.faults = faults
         self.continuous = continuous
         self.belt_speed = belt_speed
@@ -65,13 +77,31 @@ class ConveyorScene(Node):
         self.count = 0
         self.items = deque()
         self.pending = None  # in-flight service call
+        self.steps = []      # calls still to make for the pair being put down, one per tick
+        self.pause_cli = self.create_client(EmptySrv, "/pause_physics")
+        self.unpause_cli = self.create_client(EmptySrv, "/unpause_physics")
         self.bins_done = False
 
         self.create_subscription(JointState, "/conveyor/encoder", self._on_encoder, 10)
+        self.create_subscription(Empty, "/feeder/start", self._on_start, 10)
+        self.status_pub = self.create_publisher(String, "/feeder/status", 10)
+        self.create_timer(0.25, self._publish_status)
         self.create_timer(0.02, self._tick)  # wall clock: keeps the spacing exact when the simulation runs fast
 
     def _on_encoder(self, msg):
         self.encoder = msg.position[0]
+
+    def _on_start(self, _msg):
+        if not self.started:
+            self.get_logger().info("sorter is ready, feeding starts")
+        self.started = True
+
+    def _publish_status(self):
+        done = self.feed_limit > 0 and self.count >= self.feed_limit
+        self.status_pub.publish(String(data=json.dumps({
+            "fed": self.count, "limit": self.feed_limit, "done": done, "waiting_for_start": not self.started,
+            "last_item_at": self.last_item_at, "encoder": self.encoder, "seed": self.seed, "items": self.manifest,
+        })))
 
     def _spawn(self, name, sdf, x, y, z, yaw=0.0):
         pose = Pose()
@@ -83,8 +113,9 @@ class ConveyorScene(Node):
         def dbl(name, v):
             return Parameter(name=name, value=ParameterValue(type=ParameterType.PARAMETER_DOUBLE, double_value=v))
 
+        seed = Parameter(name="seed", value=ParameterValue(type=ParameterType.PARAMETER_INTEGER, integer_value=self.seed or 0))
         self.gripper_params.call_async(
-            SetParameters.Request(parameters=[dbl("slip_rate", layout.SLIP_RATE), dbl("drop_rate", layout.DROP_RATE)])
+            SetParameters.Request(parameters=[dbl("slip_rate", layout.SLIP_RATE), dbl("drop_rate", layout.DROP_RATE), seed])
         )
         self.faults_set = True
         self.get_logger().info(f"gripper faults: slip {layout.SLIP_RATE:.0%}, drop {layout.DROP_RATE:.0%}")
@@ -119,28 +150,43 @@ class ConveyorScene(Node):
             name = f"long_{n:04d}_{label}"
             self.pending = self._spawn(name, self.long_sdf.replace("Gazebo/Red", f"Gazebo/{color}"), x, y, z, yaw)
             self.get_logger().info(f"new item {name} (rotated {math.degrees(yaw):.0f} deg)")
+            self.note = {"kind": "long", "yaw_deg": round(math.degrees(yaw), 1)}
             return [name]
         if kind == "pair":
             label2 = self.rng.choice(list(layout.GAZEBO_COLORS))
             a, b = f"pair_{n:04d}a_{label}", f"pair_{n:04d}b_{label2}"
+            # The belt never waits, and a spawned model appears about 0.2 s after the call: at 10 cm/s
+            # the two cubes came out 2 cm apart along the belt and stacks fell over. So the simulation
+            # clock is paused while the pair is put down (no simulated time passes, the belt, the robot
+            # and every timestamp are untouched), one call after the other.
+            cube_a, cube_b = self._cube(color), self._cube(layout.GAZEBO_COLORS[label2])
             if self.rng.random() < 0.5:  # side by side across the belt, touching
-                self._spawn(a, self._cube(color), x - 0.021, y, z)
-                self.pending = self._spawn(b, self._cube(layout.GAZEBO_COLORS[label2]), x + 0.021, y, z)
+                pose_a, pose_b = (x - 0.021, y, z), (x + 0.021, y, z)
                 how = "side by side"
             else:  # stacked
-                self._spawn(a, self._cube(color), x, y, z)
-                self.pending = self._spawn(b, self._cube(layout.GAZEBO_COLORS[label2]), x, y, z + CUBE_SIZE + 0.002)
+                pose_a, pose_b = (x, y, z), (x, y, z + CUBE_SIZE + 0.002)
                 how = "stacked"
+            if self.pause_cli.service_is_ready() and self.unpause_cli.service_is_ready():
+                self.pending = self.pause_cli.call_async(EmptySrv.Request())
+                self.steps += [lambda: self._spawn(a, cube_a, *pose_a), lambda: self._spawn(b, cube_b, *pose_b),
+                               lambda: self.unpause_cli.call_async(EmptySrv.Request())]
+            else:
+                self.get_logger().warning("no /pause_physics service: the pair will come out staggered")
+                self._spawn(a, cube_a, *pose_a)
+                self.pending = self._spawn(b, cube_b, *pose_b)
             self.get_logger().info(f"new items {a} + {b} ({how})")
+            self.note = {"kind": "pair", "how": how}
             return [a, b]
         if kind == "unknown":
             name = f"unk_{n:04d}_purple"
             self.pending = self._spawn(name, self._cube(layout.UNKNOWN_COLOR), x, y, z)
             self.get_logger().info(f"new item {name} (unknown)")
+            self.note = {"kind": "unknown"}
             return [name]
         name = f"item_{n:04d}_{label}"
         self.pending = self._spawn(name, self._cube(color), x, y, z)
         self.get_logger().info(f"new item {name}")
+        self.note = {"kind": "normal"}
         return [name]
 
     def _tick(self):
@@ -149,6 +195,9 @@ class ConveyorScene(Node):
         if self.pending is not None and not self.pending.done():
             return
         self.pending = None
+        if self.steps:  # rest of a pair: second cube, then let the clock run again
+            self.pending = self.steps.pop(0)()
+            return
 
         if not self.bins_done:
             for label, (x, y) in layout.BINS.items():
@@ -166,6 +215,8 @@ class ConveyorScene(Node):
                 self._set_belt()
             return
 
+        if not self.started or (self.feed_limit > 0 and self.count >= self.feed_limit):
+            return
         if self.last_item_at is not None and self.encoder - self.last_item_at < self.item_spacing:
             return
 
@@ -175,7 +226,9 @@ class ConveyorScene(Node):
             self.pending = self.delete_cli.call_async(DeleteEntity.Request(name=old))
             return
 
-        self.items.extend(self._feed())
+        names = self._feed()
+        self.items.extend(names)
+        self.manifest.append({"slot": self.count, "names": names, "encoder": self.encoder, **self.note})
         self.count += 1
         self.last_item_at = self.encoder
 
@@ -188,11 +241,14 @@ def main():
     parser.add_argument("--continuous", default="false", help="true: the belt never stops at the light curtain")
     parser.add_argument("--belt-speed", type=float, default=layout.BELT_SPEED)
     parser.add_argument("--item-spacing", type=float, default=layout.ITEM_SPACING)
+    parser.add_argument("--feed-limit", type=int, default=0, help="stop feeding after N feeds (0 = endless)")
+    parser.add_argument("--wait-start", default="false", help="true: feed only after a message on /feeder/start")
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])
     rclpy.init()
     node = ConveyorScene(
         args.max_items, args.seed, args.faults.lower() == "true",
         args.continuous.lower() == "true", args.belt_speed, args.item_spacing,
+        args.feed_limit, args.wait_start.lower() == "true",
     )
     try:
         rclpy.spin(node)
