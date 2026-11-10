@@ -118,8 +118,10 @@ private:
   void event(const std::string & what, const std::string & objects, const std::string & reason = "")
   {
     std::ostringstream json;
+    // the fault settings in force are part of every line, so a run where they were never set is visible
     json << "{\"t\":" << world_->SimTime().Double() << ",\"event\":\"" << what << "\",\"objects\":[" << objects <<
-      "],\"reason\":\"" << reason << "\"}";
+      "],\"reason\":\"" << reason << "\",\"slip_rate\":" << rate("slip_rate") << ",\"drop_rate\":" << rate("drop_rate") <<
+      ",\"seed\":" << node_->get_parameter("seed").as_int() << "}";
     std_msgs::msg::String msg;
     msg.data = json.str();
     events_pub_->publish(msg);

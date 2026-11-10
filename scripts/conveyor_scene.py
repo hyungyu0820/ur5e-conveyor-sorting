@@ -25,6 +25,7 @@ import math
 import os
 import random
 import sys
+import time
 from collections import deque
 
 import rclpy
@@ -69,6 +70,7 @@ class ConveyorScene(Node):
         self.bin_sdf = read_model("bin")
         self.gripper_params = self.create_client(SetParameters, "/grasp_attacher/set_parameters")
         self.faults_set = not faults
+        self.requests = {}   # parameter requests waiting for their answer: key -> (future, time sent)
         self.spawn_cli = self.create_client(SpawnEntity, "/spawn_entity")
         self.delete_cli = self.create_client(DeleteEntity, "/delete_entity")
 
@@ -100,6 +102,7 @@ class ConveyorScene(Node):
         done = self.feed_limit > 0 and self.count >= self.feed_limit
         self.status_pub.publish(String(data=json.dumps({
             "fed": self.count, "limit": self.feed_limit, "done": done, "waiting_for_start": not self.started,
+            "faults": self.faults, "faults_confirmed": self.faults and self.faults_set,
             "last_item_at": self.last_item_at, "encoder": self.encoder, "seed": self.seed, "items": self.manifest,
         })))
 
@@ -114,23 +117,35 @@ class ConveyorScene(Node):
             return Parameter(name=name, value=ParameterValue(type=ParameterType.PARAMETER_DOUBLE, double_value=v))
 
         seed = Parameter(name="seed", value=ParameterValue(type=ParameterType.PARAMETER_INTEGER, integer_value=self.seed or 0))
-        self.gripper_params.call_async(
+        return self.gripper_params.call_async(
             SetParameters.Request(parameters=[dbl("slip_rate", layout.SLIP_RATE), dbl("drop_rate", layout.DROP_RATE), seed])
         )
-        self.faults_set = True
-        self.get_logger().info(f"gripper faults: slip {layout.SLIP_RATE:.0%}, drop {layout.DROP_RATE:.0%}")
+
+    def _confirm(self, key, send, what):
+        """Send a parameter request and only believe it once the answer says every value was taken.
+
+        A request sent the moment a service appears can get lost; without this check a run would
+        silently go on with the old values (no gripper faults, or the default belt speed).
+        Returns True when confirmed; call again on later ticks until then.
+        """
+        future, sent_at = self.requests.get(key, (None, 0.0))
+        now = time.monotonic()
+        if future is not None and future.done():
+            result = future.result()
+            if result is not None and all(r.successful for r in result.results):
+                self.get_logger().info(f"{what} (confirmed)")
+                return True
+            future = None
+        if future is None or now - sent_at > 2.0:
+            self.requests[key] = (send(), now)
+        return False
 
     def _set_belt(self):
-        self.belt_params.call_async(
+        return self.belt_params.call_async(
             SetParameters.Request(parameters=[
                 Parameter(name="speed", value=ParameterValue(type=ParameterType.PARAMETER_DOUBLE, double_value=self.belt_speed)),
                 Parameter(name="stop_at_sensor", value=ParameterValue(type=ParameterType.PARAMETER_BOOL, bool_value=not self.continuous)),
             ])
-        )
-        self.belt_set = True
-        self.get_logger().info(
-            f"belt: {self.belt_speed:.3f} m/s, item every {self.item_spacing:.2f} m, "
-            f"{'never stops' if self.continuous else 'stops at the light curtain'}"
         )
 
     def _cube(self, color):
@@ -207,12 +222,19 @@ class ConveyorScene(Node):
             self.bins_done = True
             self.get_logger().info(f"bins spawned: {', '.join(layout.BINS)}, hold")
             return
-        if not self.faults_set and self.gripper_params.service_is_ready():
-            self._set_gripper_faults()
+        if not self.faults_set:  # no item is fed before the gripper's fault rates are in force
+            if self.gripper_params.service_is_ready():
+                self.faults_set = self._confirm(
+                    "gripper", self._set_gripper_faults,
+                    f"gripper faults: slip {layout.SLIP_RATE:.0%}, drop {layout.DROP_RATE:.0%}, seed {self.seed}")
+            return
 
         if not self.belt_set:
             if self.belt_params.service_is_ready():
-                self._set_belt()
+                self.belt_set = self._confirm(
+                    "belt", self._set_belt,
+                    f"belt: {self.belt_speed:.3f} m/s, item every {self.item_spacing:.2f} m, "
+                    f"{'never stops' if self.continuous else 'stops at the light curtain'}")
             return
 
         if not self.started or (self.feed_limit > 0 and self.count >= self.feed_limit):

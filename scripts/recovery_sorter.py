@@ -258,8 +258,9 @@ class RecoverySorter(TrackingSorter):
     def release(self, track):
         for _ in range(3):
             rclpy.spin_once(self, timeout_sec=0.01)
+        held = self.holding  # read the object sensor BEFORE letting go: after the release it says "empty" anyway
         res = self.trigger(self.detach_cli)
-        if self.holding is False or not res.success:  # the object sensor says the gripper arrived empty
+        if held is False or not res.success:  # the gripper arrived empty
             self.gripper_pub.publish(self._gripper_msg(GRIPPER_OPEN))
             track.dropped = True
             self.log_event("exception", track, kind="lost_in_transport")
