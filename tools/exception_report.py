@@ -74,6 +74,10 @@ def analyse(name, truth, robot, requests):
             "at_zone": info.get("at_zone") if info else None,
         })
 
+    # were the agreed fault settings really in force at every grasp? (older runs do not log them)
+    settings = {(e.get("slip_rate"), e.get("drop_rate"), e.get("seed")) for e in truth["grasp_events"]}
+    faults_ok = settings == {(0.1, 0.05, truth["feeder"]["seed"])} if settings and None not in next(iter(settings)) else None
+
     ev = robot["events"]
     grasps = [e for e in ev if e["event"] == "grasp"]
     first_empty = {}
@@ -131,6 +135,10 @@ def analyse(name, truth, robot, requests):
         "drops_noticed_by_robot": len(lost),
         "diagnosis_requests": requests,
         "sim_elapsed_s": robot.get("sim_elapsed_s"),
+        "fault_settings_verified": faults_ok,
+        "wrist_frames_per_sim_s": robot.get("wrist_frames_per_sim_s"),
+        "wrist_looks": {k: v for k, v in robot.get("wrist_looks", {}).items() if k != "frames_in_window"} or None,
+        "true_slips": sum(1 for e in truth["grasp_events"] if e["reason"] == "fail:slipped"),
         "items": objects,
     }
 
@@ -183,7 +191,8 @@ def main():
               f" {r['recovery_s']}, gave up {r['gave_up']}, missed while busy {r['robot_missed_busy']},"
               f" robot counted {r['robot_counted_sorted']} sorted, drops {r['drops_in_transport_truth']}"
               f" (noticed {r['drops_noticed_by_robot']}), diagnosis requests {r['diagnosis_requests']}")
-        print("   by kind:", {k: f"{v['sorted']}/{v['n']}" for k, v in r["by_kind"].items()})
+        print("   by kind:", {k: f"{v.get('sorted', 0)}/{v['n']}" for k, v in r["by_kind"].items()},
+              "| fault settings verified:", r["fault_settings_verified"], "| true slips", r["true_slips"])
         if args.items:
             for o in r["items"]:
                 print(f"   slot {o['slot']:2d} {o['name']:20s} {o['kind']:8s} {str(o['detail']):13s} {o['outcome']:17s}"
