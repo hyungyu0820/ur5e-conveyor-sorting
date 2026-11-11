@@ -39,12 +39,13 @@ def record(out_dir):
         count[0] += 1
 
     node.create_subscription(Image, "/overview_camera/image_raw", on_image, qos_profile_sensor_data)
-    signal.signal(signal.SIGTERM, lambda *_: rclpy.try_shutdown())
-    try:
-        rclpy.spin(node)
-    except (KeyboardInterrupt, Exception):  # noqa: BLE001 (shutdown while spinning)
-        pass
-    print(f"saved {count[0]} frames to {out_dir}")
+    def stop(*_):  # frames are already on disk: leave at once, a spinning node does not always return
+        print(f"saved {count[0]} frames to {out_dir}", flush=True)
+        os._exit(0)
+
+    signal.signal(signal.SIGTERM, stop)
+    signal.signal(signal.SIGINT, stop)
+    rclpy.spin(node)
 
 
 def gif(frames_dir, out, t0, t1, fps, label, width):
@@ -77,8 +78,11 @@ def gif(frames_dir, out, t0, t1, fps, label, width):
     # one shared palette: per-frame palettes make the colours flicker
     palette = frames[len(frames) // 2].quantize(colors=255, method=Image.MEDIANCUT)
     quantised = [f.quantize(palette=palette, dither=Image.NONE) for f in frames]
-    quantised[0].save(out, save_all=True, append_images=quantised[1:], duration=round(1000 / fps), loop=0, optimize=False)
+    # GIF frame times are whole hundredths of a second: 15 frames per second becomes 70 ms a frame (0.95 x real speed)
+    frame_ms = max(round(100 / fps), 2) * 10
+    quantised[0].save(out, save_all=True, append_images=quantised[1:], duration=frame_ms, loop=0, optimize=False)
     info = {"gif": os.path.basename(out), "sim_from": t0, "sim_to": t1, "fps": fps, "frames": len(frames),
+            "frame_ms": frame_ms, "playback_speed": round(1000 / fps / frame_ms, 2),
             "recorded_frames_inside": len(inside), "largest_gap_between_recorded_frames_s": round(max(gaps), 3),
             "mean_recorded_fps": round((len(inside) - 1) / (inside[-1] - inside[0]), 1)}
     print(json.dumps(info, ensure_ascii=False))
