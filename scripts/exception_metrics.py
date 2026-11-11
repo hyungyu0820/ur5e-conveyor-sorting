@@ -87,7 +87,9 @@ def main():
     node = Recorder()
     try:
         rclpy.spin(node)
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, RuntimeError):
+        # SIGTERM can arrive while a message is being taken: rclpy then reports a RuntimeError instead
+        # of the KeyboardInterrupt, and the truth of the whole run would be lost
         pass
     node.write(args.out)
     rclpy.try_shutdown()

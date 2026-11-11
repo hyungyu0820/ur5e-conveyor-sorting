@@ -239,6 +239,26 @@ seed별로는 이렇습니다.
 - 예외 없는 벨트 추적은 최종 코드로도 12 / 12, 놓침 0, 사이클 5.15초(2배속)였습니다.
 - `tools/check_kinematics.py` 통과(자세 뒤집힘 0). 돌려 집기의 역기구학은 집는 구간 전체에서 ±90°까지 계산으로 확인했습니다.
 
+## 8. 파일
+
+| 파일 | 내용 |
+|---|---|
+| `scripts/recovery_sorter.py` | 복구 규칙이 들어간 분류 프로그램 |
+| `scripts/wrist_check.py` | 손목 카메라 화면에서 모양을 재고 종류를 가리는 규칙 |
+| `scripts/gemini_diagnosis.py` | 진단 훅 (기본 연습 모드) |
+| `scripts/exception_metrics.py` | 시뮬레이터의 실제 기록 저장 |
+| `tools/exception_trial.sh` | 시험 1회 자동 실행 |
+| `tools/exception_report.py` | 물건별 결과와 합계 계산 |
+| `tools/tune_wrist_check.py` | 저장한 화면으로 규칙 기준값 점검 |
+| `tools/plot_exception.py` | 그림 생성 |
+| `docs/data/exception_results.json` | 이 보고서의 숫자 (물건 110개의 결과 포함) |
+| `docs/data/exception_results_overlap.json` | 9.1의 숫자 (seed 1~3, 세 방식) |
+| `docs/data/exception_results_seeds4to6.json` | 9.2의 숫자 (seed 4~6, 세 방식) |
+| `docs/data/gemini_live_check.json` | 9.3의 Gemini 호출 12건 (질문, 답, 응답 시간) |
+| `tools/gemini_replay.py` | 저장된 진단 요청을 나중에 Gemini에 보내는 도구 (상한 20번) |
+| `tools/record_clip.sh`, `tools/record_clip.py` | 느리게 돌려 찍고 실제 속도로 재생되는 GIF 만들기 |
+| `~/ros2_ws/log/sim/exception/` | 실행별 원본 기록 (저장소 밖) |
+
 ## 9. 오전 추가 실험 (2026-11-11 오전)
 
 밤사이 결과에서 남은 손실 52개 중 40개가 겹친 물건이었습니다. 오전에는 이것을 다뤘고, 새 seed로 어젯밤 결과를 다시 확인했고, 저장해 둔 진단 요청을 Gemini에 실제로 보내 봤습니다.
@@ -446,23 +466,3 @@ python3 tools/gemini_replay.py ~/ros2_ws/log/sim/exception/recovery_seed{1,2,3}_
 - 겹친 물건의 비율을 바꾼 측정, 2배속 측정, 통계 검정.
 - Gemini를 실행 중에 호출하기, 질문 문장 고치기.
 - GitHub 업로드와 병합.
-
-## 8. 파일
-
-| 파일 | 내용 |
-|---|---|
-| `scripts/recovery_sorter.py` | 복구 규칙이 들어간 분류 프로그램 |
-| `scripts/wrist_check.py` | 손목 카메라 화면에서 모양을 재고 종류를 가리는 규칙 |
-| `scripts/gemini_diagnosis.py` | 진단 훅 (기본 연습 모드) |
-| `scripts/exception_metrics.py` | 시뮬레이터의 실제 기록 저장 |
-| `tools/exception_trial.sh` | 시험 1회 자동 실행 |
-| `tools/exception_report.py` | 물건별 결과와 합계 계산 |
-| `tools/tune_wrist_check.py` | 저장한 화면으로 규칙 기준값 점검 |
-| `tools/plot_exception.py` | 그림 생성 |
-| `docs/data/exception_results.json` | 이 보고서의 숫자 (물건 110개의 결과 포함) |
-| `docs/data/exception_results_overlap.json` | 9.1의 숫자 (seed 1~3, 세 방식) |
-| `docs/data/exception_results_seeds4to6.json` | 9.2의 숫자 (seed 4~6, 세 방식) |
-| `docs/data/gemini_live_check.json` | 9.3의 Gemini 호출 12건 (질문, 답, 응답 시간) |
-| `tools/gemini_replay.py` | 저장된 진단 요청을 나중에 Gemini에 보내는 도구 (상한 20번) |
-| `tools/record_clip.sh`, `tools/record_clip.py` | 느리게 돌려 찍고 실제 속도로 재생되는 GIF 만들기 |
-| `~/ros2_ws/log/sim/exception/` | 실행별 원본 기록 (저장소 밖) |
