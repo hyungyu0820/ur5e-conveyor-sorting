@@ -1,0 +1,4406 @@
+{
+ "summary": {
+  "recovery": {
+   "slots": 90,
+   "objects": 106,
+   "sorted": 65,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 21,
+   "passed_untouched": 20,
+   "grasp_attempts": 99,
+   "empty_grasps": 34,
+   "exceptions_noticed": 36,
+   "recovered": 11,
+   "gave_up": 25,
+   "robot_missed_busy": 2,
+   "robot_counted_sorted": 63,
+   "drops_in_transport_truth": 2,
+   "drops_noticed_by_robot": 2,
+   "diagnosis_requests": 11,
+   "second_items_queued": 0,
+   "second_items_out_of_reach": 0,
+   "seeds": [
+    4,
+    5,
+    6
+   ],
+   "sorted_share": 0.6132,
+   "throughput_sorted_per_h": 520.0,
+   "recovery_s": {
+    "n": 11,
+    "mean": 1.86,
+    "median": 1.9,
+    "max": 2.4
+   },
+   "give_up_s": {
+    "n": 23,
+    "mean": 0.62,
+    "max": 0.7
+   },
+   "by_kind": {
+    "normal": {
+     "n": 48,
+     "sorted": 44,
+     "passed_tried": 3,
+     "passed_untouched": 1
+    },
+    "pair": {
+     "n": 32,
+     "sorted": 0,
+     "passed_tried": 14,
+     "passed_untouched": 18
+    },
+    "long": {
+     "n": 16,
+     "sorted": 12,
+     "passed_tried": 4
+    },
+    "unknown": {
+     "n": 10,
+     "sorted": 9,
+     "passed_untouched": 1
+    }
+   },
+   "piles": {
+    "side by side": {
+     "piles": 7,
+     "one_sorted": 0,
+     "both_sorted": 0
+    },
+    "stacked": {
+     "piles": 9,
+     "one_sorted": 0,
+     "both_sorted": 0
+    }
+   },
+   "recovery_s_by_how": {
+    "regrasp_turned": {
+     "n": 7,
+     "mean": 2.07,
+     "min": 1.8,
+     "max": 2.4
+    },
+    "retry": {
+     "n": 4,
+     "mean": 1.5,
+     "min": 1.5,
+     "max": 1.5
+    }
+   },
+   "recovered_how": {
+    "regrasp_turned": 7,
+    "retry": 4
+   },
+   "gave_up_kinds": {
+    "long": 4,
+    "pair": 7,
+    "single": 3,
+    "stacked": 9,
+    "dropped": 2
+   }
+  },
+  "overlap": {
+   "slots": 90,
+   "objects": 106,
+   "sorted": 74,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 20,
+   "passed_untouched": 12,
+   "grasp_attempts": 100,
+   "empty_grasps": 26,
+   "exceptions_noticed": 28,
+   "recovered": 21,
+   "gave_up": 15,
+   "robot_missed_busy": 15,
+   "robot_counted_sorted": 72,
+   "drops_in_transport_truth": 2,
+   "drops_noticed_by_robot": 2,
+   "diagnosis_requests": 12,
+   "second_items_queued": 12,
+   "second_items_out_of_reach": 12,
+   "seeds": [
+    4,
+    5,
+    6
+   ],
+   "sorted_share": 0.6981,
+   "throughput_sorted_per_h": 592.0,
+   "recovery_s": {
+    "n": 21,
+    "mean": 1.74,
+    "median": 1.5,
+    "max": 2.4
+   },
+   "give_up_s": {
+    "n": 13,
+    "mean": 0.65,
+    "max": 0.7
+   },
+   "by_kind": {
+    "normal": {
+     "n": 48,
+     "sorted": 43,
+     "passed_untouched": 3,
+     "passed_tried": 2
+    },
+    "pair": {
+     "n": 32,
+     "sorted": 12,
+     "passed_tried": 11,
+     "passed_untouched": 9
+    },
+    "long": {
+     "n": 16,
+     "sorted": 9,
+     "passed_tried": 7
+    },
+    "unknown": {
+     "n": 10,
+     "sorted": 10
+    }
+   },
+   "piles": {
+    "side by side": {
+     "piles": 7,
+     "one_sorted": 3,
+     "both_sorted": 0
+    },
+    "stacked": {
+     "piles": 9,
+     "one_sorted": 9,
+     "both_sorted": 0
+    }
+   },
+   "recovery_s_by_how": {
+    "regrasp_one": {
+     "n": 3,
+     "mean": 2.37,
+     "min": 2.3,
+     "max": 2.4
+    },
+    "regrasp_turned": {
+     "n": 4,
+     "mean": 2.17,
+     "min": 1.9,
+     "max": 2.4
+    },
+    "retry": {
+     "n": 6,
+     "mean": 1.52,
+     "min": 1.5,
+     "max": 1.6
+    },
+    "top_first": {
+     "n": 8,
+     "mean": 1.46,
+     "min": 1.4,
+     "max": 1.6
+    }
+   },
+   "recovered_how": {
+    "regrasp_one": 3,
+    "regrasp_turned": 4,
+    "retry": 6,
+    "top_first": 8
+   },
+   "gave_up_kinds": {
+    "long": 7,
+    "pair": 4,
+    "single": 2,
+    "dropped": 2
+   }
+  }
+ },
+ "runs": [
+  {
+   "piles": {
+    "side by side": {
+     "piles": 4,
+     "one_sorted": 0,
+     "both_sorted": 0
+    },
+    "stacked": {
+     "piles": 2,
+     "one_sorted": 0,
+     "both_sorted": 0
+    }
+   },
+   "second_items_queued": 0,
+   "second_items_out_of_reach": 0,
+   "run": "recovery_seed4_rate1_shm",
+   "seed": 4,
+   "slots": 30,
+   "objects": 36,
+   "sorted": 22,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 10,
+   "passed_untouched": 4,
+   "by_kind": {
+    "normal": {
+     "n": 15,
+     "sorted": 14,
+     "passed_tried": 1
+    },
+    "pair": {
+     "n": 12,
+     "sorted": 0,
+     "passed_tried": 8,
+     "passed_untouched": 4
+    },
+    "long": {
+     "n": 7,
+     "sorted": 6,
+     "passed_tried": 1
+    },
+    "unknown": {
+     "n": 2,
+     "sorted": 2
+    }
+   },
+   "throughput_sorted_per_h": 528.0,
+   "input_window_s": 150.0,
+   "grasp_attempts": 34,
+   "empty_grasps": 12,
+   "exceptions_noticed": 12,
+   "recovered": 4,
+   "recovery_s": [
+    1.8,
+    2.1,
+    2.2,
+    1.5
+   ],
+   "recovered_how": {
+    "regrasp_turned": 3,
+    "retry": 1
+   },
+   "recovery_s_by_how": {
+    "regrasp_turned": [
+     1.8,
+     2.1,
+     2.2
+    ],
+    "retry": [
+     1.5
+    ]
+   },
+   "gave_up": 8,
+   "give_up_s": [
+    0.6,
+    0.6,
+    0.6,
+    0.6,
+    0.7,
+    0.6,
+    0.6,
+    0.7
+   ],
+   "gave_up_kinds": {
+    "long": 1,
+    "pair": 4,
+    "single": 1,
+    "stacked": 2
+   },
+   "robot_missed_busy": 0,
+   "robot_counted_sorted": 22,
+   "drops_in_transport_truth": 0,
+   "drops_noticed_by_robot": 0,
+   "diagnosis_requests": 2,
+   "sim_elapsed_s": 155.60000000000002,
+   "fault_settings_verified": true,
+   "wrist_frames_per_sim_s": {
+    "rgb": 14.18,
+    "depth": 14.18
+   },
+   "wrist_looks": {
+    "looks": 14,
+    "no_frame": 0
+   },
+   "true_slips": 2,
+   "items": [
+    {
+     "name": "item_0000_red",
+     "slot": 0,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1103,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0001_blue",
+     "slot": 1,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1111,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0002_red",
+     "slot": 2,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1281,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0003_red",
+     "slot": 3,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1281,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0004a_green",
+     "slot": 4,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1117,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0004b_red",
+     "slot": 4,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1117,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0005_blue",
+     "slot": 5,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1114,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0006a_red",
+     "slot": 6,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1112,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0006b_green",
+     "slot": 6,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1112,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0007a_red",
+     "slot": 7,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5069,
+      -0.129,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0007b_green",
+     "slot": 7,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5061,
+      -0.1288,
+      0.2584
+     ]
+    },
+    {
+     "name": "item_0008_red",
+     "slot": 8,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1279,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0009_green",
+     "slot": 9,
+     "kind": "long",
+     "detail": 131.7,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.126,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0010_green",
+     "slot": 10,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1261,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0011_blue",
+     "slot": 11,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1259,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0012_green",
+     "slot": 12,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1245,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0013_red",
+     "slot": 13,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1243,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0014_green",
+     "slot": 14,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1446,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0015a_blue",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.128,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0015b_red",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.128,
+      0.258
+     ]
+    },
+    {
+     "name": "long_0016_blue",
+     "slot": 16,
+     "kind": "long",
+     "detail": 56.1,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1447,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0017_blue",
+     "slot": 17,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.144,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0018_green",
+     "slot": 18,
+     "kind": "long",
+     "detail": 77.6,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1408,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0019_red",
+     "slot": 19,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1391,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0020a_green",
+     "slot": 20,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1369,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0020b_red",
+     "slot": 20,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1369,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0021_green",
+     "slot": 21,
+     "kind": "long",
+     "detail": 50.5,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1034,
+      0.219
+     ]
+    },
+    {
+     "name": "long_0022_blue",
+     "slot": 22,
+     "kind": "long",
+     "detail": 126.2,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1014,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0023_purple",
+     "slot": 23,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1471,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0024_red",
+     "slot": 24,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1135,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0025_red",
+     "slot": 25,
+     "kind": "long",
+     "detail": 79.4,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1095,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0026_red",
+     "slot": 26,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1066,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0027_blue",
+     "slot": 27,
+     "kind": "long",
+     "detail": 114.2,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1047,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0028_purple",
+     "slot": 28,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1221,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0029a_red",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1043,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0029b_blue",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1043,
+      0.2192
+     ]
+    }
+   ]
+  },
+  {
+   "piles": {
+    "stacked": {
+     "piles": 3,
+     "one_sorted": 0,
+     "both_sorted": 0
+    },
+    "side by side": {
+     "piles": 1,
+     "one_sorted": 0,
+     "both_sorted": 0
+    }
+   },
+   "second_items_queued": 0,
+   "second_items_out_of_reach": 0,
+   "run": "recovery_seed5_rate1_shm",
+   "seed": 5,
+   "slots": 30,
+   "objects": 34,
+   "sorted": 23,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 4,
+   "passed_untouched": 7,
+   "by_kind": {
+    "normal": {
+     "n": 21,
+     "sorted": 19,
+     "passed_tried": 1,
+     "passed_untouched": 1
+    },
+    "pair": {
+     "n": 8,
+     "sorted": 0,
+     "passed_untouched": 6,
+     "passed_tried": 2
+    },
+    "unknown": {
+     "n": 2,
+     "sorted": 2
+    },
+    "long": {
+     "n": 3,
+     "sorted": 2,
+     "passed_tried": 1
+    }
+   },
+   "throughput_sorted_per_h": 552.0,
+   "input_window_s": 150.0,
+   "grasp_attempts": 30,
+   "empty_grasps": 7,
+   "exceptions_noticed": 7,
+   "recovered": 1,
+   "recovery_s": [
+    2.4
+   ],
+   "recovered_how": {
+    "regrasp_turned": 1
+   },
+   "recovery_s_by_how": {
+    "regrasp_turned": [
+     2.4
+    ]
+   },
+   "gave_up": 6,
+   "give_up_s": [
+    0.6,
+    0.6,
+    0.6,
+    0.6,
+    0.6,
+    0.7
+   ],
+   "gave_up_kinds": {
+    "long": 1,
+    "pair": 1,
+    "single": 1,
+    "stacked": 3
+   },
+   "robot_missed_busy": 1,
+   "robot_counted_sorted": 23,
+   "drops_in_transport_truth": 0,
+   "drops_noticed_by_robot": 0,
+   "diagnosis_requests": 2,
+   "sim_elapsed_s": 156.0,
+   "fault_settings_verified": true,
+   "wrist_frames_per_sim_s": {
+    "rgb": 14.03,
+    "depth": 14.03
+   },
+   "wrist_looks": {
+    "looks": 9,
+    "no_frame": 0
+   },
+   "true_slips": 1,
+   "items": [
+    {
+     "name": "item_0000_blue",
+     "slot": 0,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1054,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0001a_green",
+     "slot": 1,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1411,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0001b_blue",
+     "slot": 1,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1411,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0002_blue",
+     "slot": 2,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1104,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0003a_green",
+     "slot": 3,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1449,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0003b_red",
+     "slot": 3,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1449,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0004_red",
+     "slot": 4,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1139,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0005a_green",
+     "slot": 5,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1443,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0005b_green",
+     "slot": 5,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1443,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0006_blue",
+     "slot": 6,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1108,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0007_blue",
+     "slot": 7,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1105,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0008_green",
+     "slot": 8,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.111,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0009_green",
+     "slot": 9,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1111,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0010_red",
+     "slot": 10,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1125,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0011_blue",
+     "slot": 11,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1118,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0012_red",
+     "slot": 12,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1103,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0013_red",
+     "slot": 13,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1111,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0014_purple",
+     "slot": 14,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1112,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0015a_red",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1104,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0015b_green",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1104,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0016_red",
+     "slot": 16,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1274,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0017_blue",
+     "slot": 17,
+     "kind": "long",
+     "detail": 32.7,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1271,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0018_blue",
+     "slot": 18,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1262,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0019_green",
+     "slot": 19,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1247,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0020_green",
+     "slot": 20,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1246,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0021_red",
+     "slot": 21,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1414,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0022_green",
+     "slot": 22,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1399,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0023_blue",
+     "slot": 23,
+     "kind": "long",
+     "detail": 107.3,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1391,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0024_blue",
+     "slot": 24,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.138,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0025_green",
+     "slot": 25,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1343,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0026_green",
+     "slot": 26,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.102,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0027_green",
+     "slot": 27,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1498,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0028_green",
+     "slot": 28,
+     "kind": "long",
+     "detail": 10.3,
+     "outcome": "passed_tried",
+     "place": "belt",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1464,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0029_purple",
+     "slot": 29,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.144,
+      0.2193
+     ]
+    }
+   ]
+  },
+  {
+   "piles": {
+    "stacked": {
+     "piles": 4,
+     "one_sorted": 0,
+     "both_sorted": 0
+    },
+    "side by side": {
+     "piles": 2,
+     "one_sorted": 0,
+     "both_sorted": 0
+    }
+   },
+   "second_items_queued": 0,
+   "second_items_out_of_reach": 0,
+   "run": "recovery_seed6_rate1_shm",
+   "seed": 6,
+   "slots": 30,
+   "objects": 36,
+   "sorted": 20,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 7,
+   "passed_untouched": 9,
+   "by_kind": {
+    "pair": {
+     "n": 12,
+     "sorted": 0,
+     "passed_untouched": 8,
+     "passed_tried": 4
+    },
+    "normal": {
+     "n": 12,
+     "sorted": 11,
+     "passed_tried": 1
+    },
+    "long": {
+     "n": 6,
+     "sorted": 4,
+     "passed_tried": 2
+    },
+    "unknown": {
+     "n": 6,
+     "sorted": 5,
+     "passed_untouched": 1
+    }
+   },
+   "throughput_sorted_per_h": 480.0,
+   "input_window_s": 150.0,
+   "grasp_attempts": 35,
+   "empty_grasps": 15,
+   "exceptions_noticed": 17,
+   "recovered": 6,
+   "recovery_s": [
+    1.5,
+    1.9,
+    1.5,
+    2.0,
+    1.5,
+    2.1
+   ],
+   "recovered_how": {
+    "regrasp_turned": 3,
+    "retry": 3
+   },
+   "recovery_s_by_how": {
+    "regrasp_turned": [
+     1.9,
+     2.0,
+     2.1
+    ],
+    "retry": [
+     1.5,
+     1.5,
+     1.5
+    ]
+   },
+   "gave_up": 11,
+   "give_up_s": [
+    0.7,
+    0.6,
+    0.6,
+    0.6,
+    0.6,
+    0.6,
+    0.7,
+    0.6,
+    0.6
+   ],
+   "gave_up_kinds": {
+    "dropped": 2,
+    "long": 2,
+    "pair": 2,
+    "single": 1,
+    "stacked": 4
+   },
+   "robot_missed_busy": 1,
+   "robot_counted_sorted": 18,
+   "drops_in_transport_truth": 2,
+   "drops_noticed_by_robot": 2,
+   "diagnosis_requests": 7,
+   "sim_elapsed_s": 155.5,
+   "fault_settings_verified": true,
+   "wrist_frames_per_sim_s": {
+    "rgb": 14.13,
+    "depth": 14.12
+   },
+   "wrist_looks": {
+    "looks": 20,
+    "no_frame": 0
+   },
+   "true_slips": 4,
+   "items": [
+    {
+     "name": "pair_0000a_blue",
+     "slot": 0,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5069,
+      -0.1359,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0000b_green",
+     "slot": 0,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5062,
+      -0.1355,
+      0.2585
+     ]
+    },
+    {
+     "name": "item_0001_red",
+     "slot": 1,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1354,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0002_blue",
+     "slot": 2,
+     "kind": "long",
+     "detail": 173.8,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1356,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0003_blue",
+     "slot": 3,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1363,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0004_red",
+     "slot": 4,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": true,
+     "at_zone": [
+      0.5,
+      -0.1351,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0005_red",
+     "slot": 5,
+     "kind": "long",
+     "detail": 74.5,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": true,
+     "at_zone": [
+      0.5,
+      -0.1318,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0006_blue",
+     "slot": 6,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1318,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0007_red",
+     "slot": 7,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1326,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0008_blue",
+     "slot": 8,
+     "kind": "long",
+     "detail": 131.2,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.13,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0009a_blue",
+     "slot": 9,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1276,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0009b_blue",
+     "slot": 9,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1276,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0010_green",
+     "slot": 10,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.146,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0011_red",
+     "slot": 11,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1461,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0012a_green",
+     "slot": 12,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1336,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0012b_green",
+     "slot": 12,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1336,
+      0.258
+     ]
+    },
+    {
+     "name": "long_0013_red",
+     "slot": 13,
+     "kind": "long",
+     "detail": 143.4,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1476,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0014_purple",
+     "slot": 14,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1464,
+      0.2193
+     ]
+    },
+    {
+     "name": "unk_0015_purple",
+     "slot": 15,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1473,
+      0.2193
+     ]
+    },
+    {
+     "name": "unk_0016_purple",
+     "slot": 16,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1117,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0017_purple",
+     "slot": 17,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1071,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0018_red",
+     "slot": 18,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1061,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0019_purple",
+     "slot": 19,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1051,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0020_purple",
+     "slot": 20,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.104,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0021_red",
+     "slot": 21,
+     "kind": "long",
+     "detail": 44.1,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1239,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0022_green",
+     "slot": 22,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1203,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0023_blue",
+     "slot": 23,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1176,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0024a_blue",
+     "slot": 24,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1089,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0024b_blue",
+     "slot": 24,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1089,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0025_blue",
+     "slot": 25,
+     "kind": "long",
+     "detail": 56.2,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1225,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0026_red",
+     "slot": 26,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1207,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0027_red",
+     "slot": 27,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1171,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0028a_red",
+     "slot": 28,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1172,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0028b_blue",
+     "slot": 28,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1172,
+      0.258
+     ]
+    },
+    {
+     "name": "pair_0029a_red",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.12,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0029b_red",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.12,
+      0.258
+     ]
+    }
+   ]
+  },
+  {
+   "piles": {
+    "side by side": {
+     "piles": 4,
+     "one_sorted": 2,
+     "both_sorted": 0
+    },
+    "stacked": {
+     "piles": 2,
+     "one_sorted": 2,
+     "both_sorted": 0
+    }
+   },
+   "second_items_queued": 4,
+   "second_items_out_of_reach": 4,
+   "run": "overlap_seed4_rate1_shm",
+   "seed": 4,
+   "slots": 30,
+   "objects": 36,
+   "sorted": 24,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 9,
+   "passed_untouched": 3,
+   "by_kind": {
+    "normal": {
+     "n": 15,
+     "sorted": 14,
+     "passed_untouched": 1
+    },
+    "pair": {
+     "n": 12,
+     "sorted": 4,
+     "passed_tried": 6,
+     "passed_untouched": 2
+    },
+    "long": {
+     "n": 7,
+     "sorted": 4,
+     "passed_tried": 3
+    },
+    "unknown": {
+     "n": 2,
+     "sorted": 2
+    }
+   },
+   "throughput_sorted_per_h": 576.0,
+   "input_window_s": 150.0,
+   "grasp_attempts": 34,
+   "empty_grasps": 10,
+   "exceptions_noticed": 10,
+   "recovered": 7,
+   "recovery_s": [
+    2.3,
+    2.4,
+    1.4,
+    1.4,
+    1.5,
+    2.2,
+    1.5
+   ],
+   "recovered_how": {
+    "regrasp_one": 2,
+    "regrasp_turned": 1,
+    "retry": 2,
+    "top_first": 2
+   },
+   "recovery_s_by_how": {
+    "regrasp_one": [
+     2.3,
+     2.4
+    ],
+    "regrasp_turned": [
+     2.2
+    ],
+    "retry": [
+     1.5,
+     1.5
+    ],
+    "top_first": [
+     1.4,
+     1.4
+    ]
+   },
+   "gave_up": 5,
+   "give_up_s": [
+    0.7,
+    0.6,
+    0.7,
+    0.6,
+    0.6
+   ],
+   "gave_up_kinds": {
+    "long": 3,
+    "pair": 2
+   },
+   "robot_missed_busy": 5,
+   "robot_counted_sorted": 24,
+   "drops_in_transport_truth": 0,
+   "drops_noticed_by_robot": 0,
+   "diagnosis_requests": 2,
+   "sim_elapsed_s": 155.7,
+   "fault_settings_verified": true,
+   "wrist_frames_per_sim_s": {
+    "rgb": 14.65,
+    "depth": 14.65
+   },
+   "wrist_looks": {
+    "looks": 14,
+    "no_frame": 0
+   },
+   "true_slips": 2,
+   "items": [
+    {
+     "name": "item_0000_red",
+     "slot": 0,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1298,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0001_blue",
+     "slot": 1,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1307,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0002_red",
+     "slot": 2,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1303,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0003_red",
+     "slot": 3,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1305,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0004a_green",
+     "slot": 4,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.12,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0004b_red",
+     "slot": 4,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.12,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0005_blue",
+     "slot": 5,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.137,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0006a_red",
+     "slot": 6,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1213,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0006b_green",
+     "slot": 6,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1213,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0007a_red",
+     "slot": 7,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1227,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0007b_green",
+     "slot": 7,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1227,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0008_red",
+     "slot": 8,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1358,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0009_green",
+     "slot": 9,
+     "kind": "long",
+     "detail": 131.7,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1362,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0010_green",
+     "slot": 10,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1321,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0011_blue",
+     "slot": 11,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1482,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0012_green",
+     "slot": 12,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1441,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0013_red",
+     "slot": 13,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1441,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0014_green",
+     "slot": 14,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1372,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0015a_blue",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.139,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0015b_red",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.139,
+      0.258
+     ]
+    },
+    {
+     "name": "long_0016_blue",
+     "slot": 16,
+     "kind": "long",
+     "detail": 56.1,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1051,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0017_blue",
+     "slot": 17,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1038,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0018_green",
+     "slot": 18,
+     "kind": "long",
+     "detail": 77.6,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.104,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0019_red",
+     "slot": 19,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1017,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0020a_green",
+     "slot": 20,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1477,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0020b_red",
+     "slot": 20,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1477,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0021_green",
+     "slot": 21,
+     "kind": "long",
+     "detail": 50.5,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1151,
+      0.219
+     ]
+    },
+    {
+     "name": "long_0022_blue",
+     "slot": 22,
+     "kind": "long",
+     "detail": 126.2,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1056,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0023_purple",
+     "slot": 23,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1215,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0024_red",
+     "slot": 24,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1166,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0025_red",
+     "slot": 25,
+     "kind": "long",
+     "detail": 79.4,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1275,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0026_red",
+     "slot": 26,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.121,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0027_blue",
+     "slot": 27,
+     "kind": "long",
+     "detail": 114.2,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1207,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0028_purple",
+     "slot": 28,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1189,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0029a_red",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1158,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0029b_blue",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1158,
+      0.2192
+     ]
+    }
+   ]
+  },
+  {
+   "piles": {
+    "stacked": {
+     "piles": 3,
+     "one_sorted": 3,
+     "both_sorted": 0
+    },
+    "side by side": {
+     "piles": 1,
+     "one_sorted": 0,
+     "both_sorted": 0
+    }
+   },
+   "second_items_queued": 3,
+   "second_items_out_of_reach": 3,
+   "run": "overlap_seed5_rate1_shm",
+   "seed": 5,
+   "slots": 30,
+   "objects": 34,
+   "sorted": 26,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 4,
+   "passed_untouched": 4,
+   "by_kind": {
+    "normal": {
+     "n": 21,
+     "sorted": 19,
+     "passed_tried": 1,
+     "passed_untouched": 1
+    },
+    "pair": {
+     "n": 8,
+     "sorted": 3,
+     "passed_untouched": 3,
+     "passed_tried": 2
+    },
+    "unknown": {
+     "n": 2,
+     "sorted": 2
+    },
+    "long": {
+     "n": 3,
+     "sorted": 2,
+     "passed_tried": 1
+    }
+   },
+   "throughput_sorted_per_h": 624.0,
+   "input_window_s": 150.0,
+   "grasp_attempts": 31,
+   "empty_grasps": 5,
+   "exceptions_noticed": 5,
+   "recovered": 4,
+   "recovery_s": [
+    1.5,
+    1.4,
+    1.5,
+    2.4
+   ],
+   "recovered_how": {
+    "regrasp_turned": 1,
+    "retry": 1,
+    "top_first": 2
+   },
+   "recovery_s_by_how": {
+    "regrasp_turned": [
+     2.4
+    ],
+    "retry": [
+     1.5
+    ],
+    "top_first": [
+     1.4,
+     1.5
+    ]
+   },
+   "gave_up": 3,
+   "give_up_s": [
+    0.7,
+    0.7,
+    0.7
+   ],
+   "gave_up_kinds": {
+    "long": 1,
+    "pair": 1,
+    "single": 1
+   },
+   "robot_missed_busy": 4,
+   "robot_counted_sorted": 26,
+   "drops_in_transport_truth": 0,
+   "drops_noticed_by_robot": 0,
+   "diagnosis_requests": 2,
+   "sim_elapsed_s": 156.0,
+   "fault_settings_verified": true,
+   "wrist_frames_per_sim_s": {
+    "rgb": 14.42,
+    "depth": 14.42
+   },
+   "wrist_looks": {
+    "looks": 9,
+    "no_frame": 0
+   },
+   "true_slips": 2,
+   "items": [
+    {
+     "name": "item_0000_blue",
+     "slot": 0,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1483,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0001a_green",
+     "slot": 1,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1496,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0001b_blue",
+     "slot": 1,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1496,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0002_blue",
+     "slot": 2,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1179,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0003a_green",
+     "slot": 3,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1033,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0003b_red",
+     "slot": 3,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1033,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0004_red",
+     "slot": 4,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1156,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0005a_green",
+     "slot": 5,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1027,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0005b_green",
+     "slot": 5,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1027,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0006_blue",
+     "slot": 6,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1216,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0007_blue",
+     "slot": 7,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1196,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0008_green",
+     "slot": 8,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1111,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0009_green",
+     "slot": 9,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1092,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0010_red",
+     "slot": 10,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1288,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0011_blue",
+     "slot": 11,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1269,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0012_red",
+     "slot": 12,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1256,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0013_red",
+     "slot": 13,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1211,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0014_purple",
+     "slot": 14,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1354,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0015a_red",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.1188,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0015b_green",
+     "slot": 15,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.1188,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0016_red",
+     "slot": 16,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1285,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0017_blue",
+     "slot": 17,
+     "kind": "long",
+     "detail": 32.7,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.14,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0018_blue",
+     "slot": 18,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1371,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0019_green",
+     "slot": 19,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1475,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0020_green",
+     "slot": 20,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1477,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0021_red",
+     "slot": 21,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1459,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0022_green",
+     "slot": 22,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1436,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0023_blue",
+     "slot": 23,
+     "kind": "long",
+     "detail": 107.3,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1407,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0024_blue",
+     "slot": 24,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.104,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0025_green",
+     "slot": 25,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.149,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0026_green",
+     "slot": 26,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1142,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0027_green",
+     "slot": 27,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1079,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0028_green",
+     "slot": 28,
+     "kind": "long",
+     "detail": 10.3,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1069,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0029_purple",
+     "slot": 29,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1019,
+      0.2192
+     ]
+    }
+   ]
+  },
+  {
+   "piles": {
+    "stacked": {
+     "piles": 4,
+     "one_sorted": 4,
+     "both_sorted": 0
+    },
+    "side by side": {
+     "piles": 2,
+     "one_sorted": 1,
+     "both_sorted": 0
+    }
+   },
+   "second_items_queued": 5,
+   "second_items_out_of_reach": 5,
+   "run": "overlap_seed6_rate1_shm",
+   "seed": 6,
+   "slots": 30,
+   "objects": 36,
+   "sorted": 24,
+   "wrong_bin": 0,
+   "dropped": 0,
+   "passed_tried": 7,
+   "passed_untouched": 5,
+   "by_kind": {
+    "pair": {
+     "n": 12,
+     "sorted": 5,
+     "passed_untouched": 4,
+     "passed_tried": 3
+    },
+    "normal": {
+     "n": 12,
+     "sorted": 10,
+     "passed_untouched": 1,
+     "passed_tried": 1
+    },
+    "long": {
+     "n": 6,
+     "sorted": 3,
+     "passed_tried": 3
+    },
+    "unknown": {
+     "n": 6,
+     "sorted": 6
+    }
+   },
+   "throughput_sorted_per_h": 576.0,
+   "input_window_s": 150.0,
+   "grasp_attempts": 35,
+   "empty_grasps": 11,
+   "exceptions_noticed": 13,
+   "recovered": 10,
+   "recovery_s": [
+    1.4,
+    1.5,
+    1.9,
+    1.5,
+    1.6,
+    2.2,
+    2.4,
+    1.6,
+    1.5,
+    1.5
+   ],
+   "recovered_how": {
+    "regrasp_one": 1,
+    "regrasp_turned": 2,
+    "retry": 3,
+    "top_first": 4
+   },
+   "recovery_s_by_how": {
+    "regrasp_one": [
+     2.4
+    ],
+    "regrasp_turned": [
+     1.9,
+     2.2
+    ],
+    "retry": [
+     1.5,
+     1.5,
+     1.6
+    ],
+    "top_first": [
+     1.4,
+     1.6,
+     1.5,
+     1.5
+    ]
+   },
+   "gave_up": 7,
+   "give_up_s": [
+    0.6,
+    0.7,
+    0.6,
+    0.7,
+    0.6
+   ],
+   "gave_up_kinds": {
+    "dropped": 2,
+    "long": 3,
+    "pair": 1,
+    "single": 1
+   },
+   "robot_missed_busy": 6,
+   "robot_counted_sorted": 22,
+   "drops_in_transport_truth": 2,
+   "drops_noticed_by_robot": 2,
+   "diagnosis_requests": 8,
+   "sim_elapsed_s": 157.3,
+   "fault_settings_verified": true,
+   "wrist_frames_per_sim_s": {
+    "rgb": 14.63,
+    "depth": 14.63
+   },
+   "wrist_looks": {
+    "looks": 21,
+    "no_frame": 0
+   },
+   "true_slips": 4,
+   "items": [
+    {
+     "name": "pair_0000a_blue",
+     "slot": 0,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1222,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0000b_green",
+     "slot": 0,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1222,
+      0.258
+     ]
+    },
+    {
+     "name": "item_0001_red",
+     "slot": 1,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1399,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0002_blue",
+     "slot": 2,
+     "kind": "long",
+     "detail": 173.8,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1404,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0003_blue",
+     "slot": 3,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.14,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0004_red",
+     "slot": 4,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": true,
+     "at_zone": [
+      0.5,
+      -0.1356,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0005_red",
+     "slot": 5,
+     "kind": "long",
+     "detail": 74.5,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": true,
+     "at_zone": [
+      0.5,
+      -0.1305,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0006_blue",
+     "slot": 6,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1296,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0007_red",
+     "slot": 7,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1445,
+      0.2193
+     ]
+    },
+    {
+     "name": "long_0008_blue",
+     "slot": 8,
+     "kind": "long",
+     "detail": 131.2,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1449,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0009a_blue",
+     "slot": 9,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.132,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0009b_blue",
+     "slot": 9,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.132,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0010_green",
+     "slot": 10,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1477,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0011_red",
+     "slot": 11,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1434,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0012a_green",
+     "slot": 12,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1384,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0012b_green",
+     "slot": 12,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "green",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1384,
+      0.258
+     ]
+    },
+    {
+     "name": "long_0013_red",
+     "slot": 13,
+     "kind": "long",
+     "detail": 143.4,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1003,
+      0.219
+     ]
+    },
+    {
+     "name": "unk_0014_purple",
+     "slot": 14,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1005,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0015_purple",
+     "slot": 15,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1491,
+      0.2193
+     ]
+    },
+    {
+     "name": "unk_0016_purple",
+     "slot": 16,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1107,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0017_purple",
+     "slot": 17,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1057,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0018_red",
+     "slot": 18,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1043,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0019_purple",
+     "slot": 19,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.118,
+      0.2192
+     ]
+    },
+    {
+     "name": "unk_0020_purple",
+     "slot": 20,
+     "kind": "unknown",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "hold",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1179,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0021_red",
+     "slot": 21,
+     "kind": "long",
+     "detail": 44.1,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1156,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0022_green",
+     "slot": 22,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1217,
+      0.2192
+     ]
+    },
+    {
+     "name": "item_0023_blue",
+     "slot": 23,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1306,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0024a_blue",
+     "slot": 24,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.479,
+      -0.113,
+      0.2192
+     ]
+    },
+    {
+     "name": "pair_0024b_blue",
+     "slot": 24,
+     "kind": "pair",
+     "detail": "side by side",
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "multiple_objects"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.521,
+      -0.113,
+      0.2192
+     ]
+    },
+    {
+     "name": "long_0025_blue",
+     "slot": 25,
+     "kind": "long",
+     "detail": 56.2,
+     "outcome": "passed_tried",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [
+      "too_wide"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1232,
+      0.219
+     ]
+    },
+    {
+     "name": "item_0026_red",
+     "slot": 26,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [
+      "slipped"
+     ],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1362,
+      0.2193
+     ]
+    },
+    {
+     "name": "item_0027_red",
+     "slot": 27,
+     "kind": "normal",
+     "detail": null,
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1298,
+      0.2193
+     ]
+    },
+    {
+     "name": "pair_0028a_red",
+     "slot": 28,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1209,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0028b_blue",
+     "slot": 28,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "blue",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1209,
+      0.258
+     ]
+    },
+    {
+     "name": "pair_0029a_red",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "passed_untouched",
+     "place": "floor",
+     "attaches": 0,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1225,
+      0.219
+     ]
+    },
+    {
+     "name": "pair_0029b_red",
+     "slot": 29,
+     "kind": "pair",
+     "detail": "stacked",
+     "outcome": "sorted",
+     "place": "red",
+     "attaches": 1,
+     "fail_reasons": [],
+     "dropped_in_transport": false,
+     "at_zone": [
+      0.5,
+      -0.1225,
+      0.258
+     ]
+    }
+   ]
+  }
+ ]
+}
