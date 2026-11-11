@@ -110,7 +110,24 @@ def analyse(name, truth, robot, requests):
         k = by_kind.setdefault(o["kind"], {"n": 0, "sorted": 0})
         k["n"] += 1
         k[o["outcome"]] = k.get(o["outcome"], 0) + 1
+    # two items that came together: how many of each kind of pile gave up at least one item, or both
+    piles = {}
+    for slot in truth["feeder"]["items"]:
+        if slot["kind"] != "pair":
+            continue
+        got = sum(1 for o in objects if o["slot"] == slot["slot"] and o["outcome"] == "sorted")
+        p = piles.setdefault(slot["how"], {"piles": 0, "one_sorted": 0, "both_sorted": 0})
+        p["piles"] += 1
+        p["one_sorted"] += got == 1
+        p["both_sorted"] += got == 2
+    second = [e for e in ev if e["event"] == "second_item_queued"]
+    second_gone = [e for e in ev if e["event"] == "missed" and "second item" in e.get("why", "")]
+    second_ids = {e["track"] for e in second}
     return {
+        "piles": piles,
+        "second_items_queued": len(second),
+        "second_items_out_of_reach": len(second_gone) + sum(1 for e in ev if e["event"] == "missed" and e["track"] in second_ids
+                                                              and "second item" not in e.get("why", "")),
         "run": name, "seed": truth["feeder"]["seed"], "slots": n_slots, "objects": len(objects),
         "sorted": count(lambda o: o["outcome"] == "sorted"),
         "wrong_bin": count(lambda o: o["outcome"] == "wrong_bin"),
@@ -126,6 +143,7 @@ def analyse(name, truth, robot, requests):
         "recovered": len(recovered),
         "recovery_s": [e["seconds"] for e in recovered],
         "recovered_how": {h: sum(1 for e in recovered if e["how"] == h) for h in sorted({e["how"] for e in recovered})},
+        "recovery_s_by_how": {h: [e["seconds"] for e in recovered if e["how"] == h] for h in sorted({e["how"] for e in recovered})},
         "gave_up": len(gave_up),
         "give_up_s": give_up_s,
         "gave_up_kinds": {k: sum(1 for e in gave_up if e.get("kind") == k) for k in sorted({str(e.get("kind")) for e in gave_up})},
@@ -146,7 +164,8 @@ def analyse(name, truth, robot, requests):
 def total(runs):
     keys = ["slots", "objects", "sorted", "wrong_bin", "dropped", "passed_tried", "passed_untouched", "grasp_attempts",
             "empty_grasps", "exceptions_noticed", "recovered", "gave_up", "robot_missed_busy", "robot_counted_sorted",
-            "drops_in_transport_truth", "drops_noticed_by_robot", "diagnosis_requests"]
+            "drops_in_transport_truth", "drops_noticed_by_robot", "diagnosis_requests", "second_items_queued",
+            "second_items_out_of_reach"]
     out = {k: sum(r[k] for r in runs) for k in keys}
     out["seeds"] = [r["seed"] for r in runs]
     out["sorted_share"] = round(out["sorted"] / out["objects"], 4)
@@ -164,6 +183,17 @@ def total(runs):
             for name, v in c.items():
                 k[name] = k.get(name, 0) + v
     out["by_kind"] = by_kind
+    out["piles"] = {}
+    for r in runs:
+        for how, c in r["piles"].items():
+            p = out["piles"].setdefault(how, {})
+            for name, v in c.items():
+                p[name] = p.get(name, 0) + v
+    by_how = {}
+    for r in runs:
+        for h, secs in r["recovery_s_by_how"].items():
+            by_how.setdefault(h, []).extend(secs)
+    out["recovery_s_by_how"] = {h: {"n": len(v), "mean": round(statistics.mean(v), 2), "min": min(v), "max": max(v)} for h, v in by_how.items()}
     out["recovered_how"] = {}
     out["gave_up_kinds"] = {}
     for r in runs:
@@ -202,6 +232,8 @@ def main():
         print(f"== {m} (seeds {t['seeds']}): sorted {t['sorted']}/{t['objects']} = {t['sorted_share']:.1%},"
               f" sorted/h {t['throughput_sorted_per_h']}, recovery {t['recovery_s']}, give-up {t['give_up_s']}")
         print("   by kind:", {k: f"{v.get('sorted', 0)}/{v['n']}" for k, v in t["by_kind"].items()})
+        print("   piles:", t["piles"], "| recovered how:", t["recovered_how"], "| second items queued", t["second_items_queued"],
+              "out of reach", t["second_items_out_of_reach"], "| missed while busy", t["robot_missed_busy"])
     if args.json:
         os.makedirs(os.path.dirname(os.path.abspath(args.json)), exist_ok=True)
         with open(args.json, "w") as f:

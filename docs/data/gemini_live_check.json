@@ -1,0 +1,322 @@
+{
+ "summary": {
+  "model": "gemini-robotics-er-2-preview",
+  "hard_cap": 20,
+  "calls_made_total": 12,
+  "as_saved": {
+   "calls_made": 12,
+   "answered": 12,
+   "failed": 0,
+   "unreadable_answers": 0,
+   "same_action_as_rule": 6,
+   "seconds": {
+    "min": 5.03,
+    "median": 7.31,
+    "max": 50.5,
+    "mean": 10.58
+   }
+  }
+ },
+ "calls": [
+  {
+   "run": "recovery_seed1_rate1",
+   "n": 1,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:45:18",
+   "seconds": 8.15,
+   "raw": "```json\n{\"kind\": \"unknown item in gripper\", \"action\": \"hold\", \"reason\": \"The gripper is currently holding an item of unknown category that should be deposited into the hold bin.\"}\n```",
+   "answer": {
+    "kind": "unknown item in gripper",
+    "action": "hold",
+    "reason": "The gripper is currently holding an item of unknown category that should be deposited into the hold bin."
+   }
+  },
+  {
+   "run": "recovery_seed1_rate1",
+   "n": 2,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": false,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "no usable frame"
+   },
+   "at": "2026-11-11 10:45:33",
+   "seconds": 5.03,
+   "raw": "```json\n{\"kind\": \"human hand in workspace\", \"action\": \"call_person\", \"reason\": \"A person's hand is holding a banana in the robot's workspace, requiring the robot to stop and alert an operator for safety.\"}\n```",
+   "answer": {
+    "kind": "human hand in workspace",
+    "action": "call_person",
+    "reason": "A person's hand is holding a banana in the robot's workspace, requiring the robot to stop and alert an operator for safety."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 1,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:45:38",
+   "seconds": 7.68,
+   "raw": "```json\n{\"kind\": \"unknown item\", \"action\": \"hold\", \"reason\": \"The item is held by the gripper but does not match any known sorting category by color, so it must be placed in the hold bin.\"}\n```",
+   "answer": {
+    "kind": "unknown item",
+    "action": "hold",
+    "reason": "The item is held by the gripper but does not match any known sorting category by color, so it must be placed in the hold bin."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 2,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:45:45",
+   "seconds": 6.41,
+   "raw": "```json\n{\"kind\": \"unknown item held\", \"action\": \"hold\", \"reason\": \"The robot is holding a brown item of unknown type, so it should proceed to place it in the hold bin.\"}\n```",
+   "answer": {
+    "kind": "unknown item held",
+    "action": "hold",
+    "reason": "The robot is holding a brown item of unknown type, so it should proceed to place it in the hold bin."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 3,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": false,
+   "rule": {
+    "action": "call_person",
+    "kind": "dropped item",
+    "why": "the robot cannot see where it fell"
+   },
+   "situation": {
+    "belt_camera_label": "blue",
+    "gripper_holds_item": false,
+    "event": "item was in the gripper after the grasp and gone on arrival at the bin"
+   },
+   "at": "2026-11-11 10:45:52",
+   "seconds": 7.42,
+   "raw": "```json\n{\"kind\": \"blue dish brush on belt\", \"action\": \"retry\", \"reason\": \"The item is clearly visible on the conveyor belt, so it can be grasped again.\"}\n```",
+   "answer": {
+    "kind": "blue dish brush on belt",
+    "action": "retry",
+    "reason": "The item is clearly visible on the conveyor belt, so it can be grasped again."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 4,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:45:59",
+   "seconds": 7.31,
+   "raw": "```json\n{\"kind\": \"sensor conflict\", \"action\": \"call_person\", \"reason\": \"The gripper sensor reports it is already holding an item, which conflicts with preparing to grasp the block on the belt.\"}\n```",
+   "answer": {
+    "kind": "sensor conflict",
+    "action": "call_person",
+    "reason": "The gripper sensor reports it is already holding an item, which conflicts with preparing to grasp the block on the belt."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 5,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": false,
+   "rule": {
+    "action": "call_person",
+    "kind": "dropped item",
+    "why": "the robot cannot see where it fell"
+   },
+   "situation": {
+    "belt_camera_label": "red",
+    "gripper_holds_item": false,
+    "event": "item was in the gripper after the grasp and gone on arrival at the bin"
+   },
+   "at": "2026-11-11 10:46:07",
+   "seconds": 5.67,
+   "raw": "```json\n{\"kind\": \"red tape dispenser on belt\", \"action\": \"retry\", \"reason\": \"The dropped item has been located on the conveyor belt directly beneath the camera, so the robot can attempt to grasp it again.\"}\n```",
+   "answer": {
+    "kind": "red tape dispenser on belt",
+    "action": "retry",
+    "reason": "The dropped item has been located on the conveyor belt directly beneath the camera, so the robot can attempt to grasp it again."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 6,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": false,
+   "rule": {
+    "action": "call_person",
+    "kind": "dropped item",
+    "why": "the robot cannot see where it fell"
+   },
+   "situation": {
+    "belt_camera_label": "green",
+    "gripper_holds_item": false,
+    "event": "item was in the gripper after the grasp and gone on arrival at the bin"
+   },
+   "at": "2026-11-11 10:46:12",
+   "seconds": 50.5,
+   "raw": "```json\n{\"kind\": \"dropped item\", \"action\": \"call_person\", \"reason\": \"The item has fallen off the belt onto the floor and is outside the robot's workspace.\"}\n```",
+   "answer": {
+    "kind": "dropped item",
+    "action": "call_person",
+    "reason": "The item has fallen off the belt onto the floor and is outside the robot's workspace."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 7,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:47:03",
+   "seconds": 6.95,
+   "raw": "```json\n{\"kind\": \"sensor discrepancy\", \"action\": \"call_person\", \"reason\": \"The gripper sensor reports holding an item while the camera shows the pink block on the belt, indicating a possible sensor malfunction.\"}\n```",
+   "answer": {
+    "kind": "sensor discrepancy",
+    "action": "call_person",
+    "reason": "The gripper sensor reports holding an item while the camera shows the pink block on the belt, indicating a possible sensor malfunction."
+   }
+  },
+  {
+   "run": "recovery_seed2_rate1",
+   "n": 8,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:47:10",
+   "seconds": 6.92,
+   "raw": "```json\n{\"kind\": \"sensor conflict\", \"action\": \"call_person\", \"reason\": \"The system reports that the gripper is holding an item, but the wrist camera is positioned to grasp an item on the belt.\"}\n```",
+   "answer": {
+    "kind": "sensor conflict",
+    "action": "call_person",
+    "reason": "The system reports that the gripper is holding an item, but the wrist camera is positioned to grasp an item on the belt."
+   }
+  },
+  {
+   "run": "recovery_seed3_rate1",
+   "n": 1,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:47:17",
+   "seconds": 6.18,
+   "raw": "```json\n{\"kind\": \"unknown item in gripper\", \"action\": \"hold\", \"reason\": \"The gripper is already holding an item of an unknown color, which should be deposited in the hold bin.\"}\n```",
+   "answer": {
+    "kind": "unknown item in gripper",
+    "action": "hold",
+    "reason": "The gripper is already holding an item of an unknown color, which should be deposited in the hold bin."
+   }
+  },
+  {
+   "run": "recovery_seed3_rate1",
+   "n": 2,
+   "variant": "as_saved",
+   "model": "gemini-robotics-er-2-preview",
+   "image": true,
+   "rule": {
+    "action": "hold",
+    "kind": "unknown item",
+    "why": "colour not in the sorting rule"
+   },
+   "situation": {
+    "belt_camera_label": "unknown",
+    "gripper_holds_item": true,
+    "wrist_camera": "single"
+   },
+   "at": "2026-11-11 10:47:23",
+   "seconds": 8.75,
+   "raw": "```json\n{\n \"kind\": \"unrecognized magenta block\",\n \"action\": \"hold\",\n \"reason\": \"The gripped item should be placed in the hold bin since the item on the belt is of an unknown color not in the sorting rules.\"\n}\n```",
+   "answer": {
+    "kind": "unrecognized magenta block",
+    "action": "hold",
+    "reason": "The gripped item should be placed in the hold bin since the item on the belt is of an unknown color not in the sorting rules."
+   }
+  }
+ ]
+}
