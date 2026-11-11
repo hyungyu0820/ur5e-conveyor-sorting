@@ -132,6 +132,12 @@ def measure(rgb, depth, K, T_world_cam, expect_xy, T_tool_cam=None, params=PARAM
         centre=[float(cx * CELL - params["roi"] + expect_xy[0]), float(cy * CELL - params["roi"] + expect_xy[1])],
         colours=colour_shares(colours[top]),
     )
+    # colours of the two ends of the outline, for telling two items lying side by side apart:
+    # ends[0] is the end towards -axis from the centre, ends[1] the end towards +axis
+    axis = (math.cos(out["angle"]), math.sin(out["angle"]))
+    along = (xy[0] - out["centre"][0]) * axis[0] + (xy[1] - out["centre"][1]) * axis[1]
+    out["axis"] = [float(axis[0]), float(axis[1])]
+    out["ends"] = [colour_shares(colours[top][along < 0]), colour_shares(colours[top][along >= 0])]
     return out
 
 

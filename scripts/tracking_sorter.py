@@ -293,13 +293,14 @@ class TrackingSorter(PickPlace):
     def on_pick_planned(self, track, start, t_above):
         """Hook: the pick trajectory starts at sim time `start` and is above the item `t_above` later."""
 
-    def pick(self, track, yaw=YAW, above=TRAVEL_Z - GRASP_Z, descend=DESCEND_TIME, open_first=False):
+    def pick(self, track, yaw=YAW, above=TRAVEL_Z - GRASP_Z, descend=DESCEND_TIME, open_first=False, grasp_z=GRASP_Z):
         """Return 'ok', 'wait' (too early), 'missed' (too late) or 'fail:<reason>'.
 
         yaw, above, descend: a grasp turned about the vertical or started from lower than the travel
         height (re-grasps). open_first: the gripper is still closed from a failed grasp.
+        grasp_z: tool height of the grasp, higher than usual for an item lying on another one.
         """
-        above_z = GRASP_Z + above
+        above_z = grasp_z + above
         start, y, q_above, move = self.intercept(track, above_z, yaw)
         if y < Y_MIN:
             return "wait"
@@ -314,7 +315,7 @@ class TrackingSorter(PickPlace):
         seed = q_above
         while t < t_above + follow:  # descend and keep following the item
             t += DT
-            z = above_z + (GRASP_Z - above_z) * smooth(min((t - t_above) / descend, 1.0))
+            z = above_z + (grasp_z - above_z) * smooth(min((t - t_above) / descend, 1.0))
             seed = self.ik_at(track.x, self.item_y(track, start + t), z, seed, yaw)
             points.append((t, seed))
 

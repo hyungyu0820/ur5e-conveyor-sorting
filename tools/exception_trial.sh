@@ -1,9 +1,11 @@
 #!/bin/bash
 # One headless exception-handling run on the belt that never stops: start the cell with faults,
 # feed N items, let one sorter work, record the simulator's truth, shut down.
-#   bash tools/exception_trial.sh <baseline|recovery> <seed> [--rate R] [--items N] [--tag T] [sorter args...]
+#   bash tools/exception_trial.sh <baseline|recovery|overlap> <seed> [--rate R] [--items N] [--tag T] [sorter args...]
 # baseline = tracking_sorter.py as it is (a failed grasp is given up, the item rides on)
 # recovery = recovery_sorter.py (wrist-camera check, retry, turned re-grasp, hold bin)
+# overlap  = recovery plus --overlap separate (optional: two items together are taken apart)
+# NOTE: the output folder is emptied first. Use --tag to keep an earlier run with the same mode, seed and rate.
 # --rate: simulation speed target (1 = real time). Final numbers: --rate 1.
 # Output: ~/ros2_ws/log/sim/exception/<mode>_seed<seed>_rate<R>[_tag]/ {robot.json, truth.json, sim.out, sorter.out}
 MODE=$1; SEED=$2; shift 2
@@ -15,7 +17,8 @@ rm -rf $OUT; mkdir -p $OUT
 case "$MODE" in
   baseline) SORTER=tracking_sorter.py; export UR_WRIST_CAMERA=${UR_WRIST_CAMERA:-false};;
   recovery) SORTER=recovery_sorter.py; export UR_WRIST_CAMERA=true; export UR_WRIST_CAMERA_MOUNT=raised_wide;;
-  *) echo "mode must be baseline or recovery"; exit 2;; esac
+  overlap) SORTER=recovery_sorter.py; SA+=(--overlap separate); export UR_WRIST_CAMERA=true; export UR_WRIST_CAMERA_MOUNT=raised_wide;;
+  *) echo "mode must be baseline, recovery or overlap"; exit 2;; esac
 source /opt/ros/humble/setup.bash
 bash $DIR/stop_sim.sh >/dev/null 2>&1
 T0=$(date +%s)
