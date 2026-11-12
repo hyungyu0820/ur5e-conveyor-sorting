@@ -85,8 +85,8 @@ ros2 run ur_pick_place conveyor_sorter.py --detector gemini --rule "초록색 �
 
 ```bash
 bash tools/exception_trial.sh baseline 1     # 복구 없음 (tracking_sorter.py 그대로), seed 1
-bash tools/exception_trial.sh recovery 1     # 복구 있음 (recovery_sorter.py)
-bash tools/exception_trial.sh overlap 1      # 복구 + 겹친 물건 떼어 집기 (선택 기능, --overlap separate)
+bash tools/exception_trial.sh recovery 1     # 복구 있음 (recovery_sorter.py --overlap pass)
+bash tools/exception_trial.sh overlap 1      # 복구 + 겹친 물건 떼어 집기 (recovery_sorter.py 기본값)
 ```
 
 | 시뮬레이션, 1배속, seed 1~3, 공급 90번 | 복구 없음 | 복구 있음 |
@@ -97,7 +97,7 @@ bash tools/exception_trial.sh overlap 1      # 복구 + 겹친 물건 떼어 집
 
 - 로봇은 그리퍼 물체 센서와 손목 카메라만 씁니다. 손목 카메라의 깊이 영상 한 장으로 물건 1개 / 긴 상자 / 붙은 2개 / 쌓인 2개를 가려, 미끄러지면 다시 집고 긴 상자는 그리퍼를 돌려 집습니다.
 - 기본 방식은 겹친 물건 40개를 한 개도 건지지 못합니다(알아채고 흘려보냄). 다시 집기는 물건이 집는 구간(4초) 안에 있을 때만 가능했습니다.
-- 선택 기능으로 겹친 물건을 떼어 집으면 같은 seed에서 67 / 110(61%)이 됩니다. 겹친 물건 15개를 건지는 대신 다른 물건 6개를 더 놓치고, 한 쌍에서 한 개만 건집니다. 처음 보는 seed 4~6에서는 46 → 64 → 73 / 106이었습니다.
+- 겹친 물건을 떼어 집으면(2026-11-12부터 `recovery_sorter.py`의 기본 동작, `--overlap pass`로 끔) 같은 seed에서 67 / 110(61%)이 됩니다. 겹친 물건 15개를 건지는 대신 다른 물건 6개를 더 놓치고, 한 쌍에서 한 개만 건집니다. 처음 보는 seed 4~6에서는 46 → 64 → 73 / 106이었습니다.
 - Gemini 진단 훅은 측정 중에는 연습 모드(보낼 사진과 질문만 저장)로만 돌렸습니다. 저장된 요청 12건을 나중에 실제로 보낸 결과(응답 5.0~8.8초, 규칙과 같은 동작 6건)는 보고서 9.3에 있습니다.
 
 ![종류별 결과](docs/media/exception_sorted_by_kind.png)

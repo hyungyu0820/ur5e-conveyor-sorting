@@ -21,7 +21,7 @@ Rules after an empty grasp, tried in this order while the item is still inside t
 Unknown items go to the hold bin. An item lost on the way to the bin is reported, not counted as sorted.
 The belt never waits: whatever is not saved rides on to the end of the line.
 
-Optional (--overlap separate, off by default so the measured behaviour stays as it was): take two
+Default (--overlap separate; --overlap pass gives the first measured recovery behaviour): take two
 items that came together apart instead of letting both pass.
   side by side   after the empty grasp the wrist camera gives the two ends of the outline and their
                  colours: grasp the nearer one with the gripper turned, fingers closing along the belt
@@ -109,7 +109,7 @@ def unknown_blobs(rgb):
 class RecoverySorter(TrackingSorter):
     def __init__(self, v_max, a_max, plan_margin, out_path, run_dir, save_frames="failed", overlap="pass"):
         super().__init__(v_max, a_max, plan_margin, out_path)
-        self.overlap = overlap == "separate"   # False: two items together are left on the belt (the measured default)
+        self.overlap = overlap == "separate"   # False (--overlap pass): two items together are left on the belt
         self.peek = None            # while a first descent can still be called off: {track, from, until, done}
         self.run_dir = os.path.expanduser(run_dir)
         self.save_frames = save_frames
@@ -536,9 +536,9 @@ def main():
     parser.add_argument("--out", default="~/ros2_ws/log/sim/recovery_result.json", help="result file")
     parser.add_argument("--run-dir", default=os.environ.get("EXC_RUN_DIR", "~/ros2_ws/log/sim/exception/manual"),
                         help="folder for saved wrist frames and diagnosis requests")
-    parser.add_argument("--overlap", choices=["pass", "separate"], default="pass",
-                        help="two items together: pass = leave both on the belt (default, the measured behaviour), "
-                             "separate = grasp one alone and come back for the other if it is still in reach")
+    parser.add_argument("--overlap", choices=["pass", "separate"], default="separate",
+                        help="two items together: separate = grasp one alone and come back for the other if it is still "
+                             "in reach (default), pass = leave both on the belt (the first measured recovery behaviour)")
     parser.add_argument("--save-frames", choices=["none", "failed", "all"], default="failed",
                         help="which wrist frames to keep: failed = only looked-at ones, all = every item (slower, for tuning)")
     args = parser.parse_args(rclpy.utilities.remove_ros_args(sys.argv)[1:])

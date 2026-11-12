@@ -10,7 +10,7 @@
 MODE=$1; SEED=$2; ITEMS=$3; SLOW=${4:-0.1}; FPS=${5:-15}
 DIR=~/ros2_ws/src/ur_pick_place; OUT=~/ros2_ws/log/sim/clips/${MODE}_seed${SEED}
 rm -rf $OUT; mkdir -p $OUT/frames
-SA=(); [ "$MODE" = "overlap" ] && SA+=(--overlap separate)
+SA=(); [ "$MODE" = "recovery" ] && SA+=(--overlap pass)
 export UR_WRIST_CAMERA=true; export UR_WRIST_CAMERA_MOUNT=raised_wide
 # Recording only: let image messages of any size go through shared memory. With the default settings the
 # wrist camera's 0.9 MB images mostly got lost once the simulation was slowed down (1.6 frames per simulated
